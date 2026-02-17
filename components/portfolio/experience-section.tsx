@@ -131,6 +131,7 @@ export function ExperienceSection() {
 
                 <ul className="list-disc list-inside space-y-2 text-foreground">
                   <li>مدرب حاسوب وبرمجة - منظمة عدالة (2025)</li>
+                  <li>كورسات أونلاين</li>
                   <li>مدرب حاسوب وتطبيقات جوجل - يونس ايمره (2024-الآن)</li>
                   <li>مطور برمجيات - شركة ماس (2024)</li>
                   <li>مدرب برمجة - مدرسة القلم النموذجية (2024)</li>
@@ -142,12 +143,12 @@ export function ExperienceSection() {
         </div>
 
         {/* Quote */}
-        <div className="mt-16 text-center">
+        {/* <div className="mt-16 text-center">
           <blockquote className="text-xl md:text-2xl text-foreground italic max-w-3xl mx-auto">
             {'"'}أؤمن بأن أفضل الحلول التقنية هي التي تجمع بين البساطة والذكاء -
             كود نظيف، تجربة مستخدم سلسة، وذكاء اصطناعي يضيف قيمة حقيقية.{'"'}
           </blockquote>
-        </div>
+        </div> */}
       </div>
     </section>
   );

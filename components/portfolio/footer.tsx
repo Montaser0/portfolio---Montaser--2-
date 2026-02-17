@@ -1,13 +1,13 @@
 "use client";
 
-import { Github, Linkedin, Twitter, Mail } from "lucide-react";
+import { Linkedin, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const socialLinks = [
-  { icon: Github, href: "#", label: "GitHub" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Mail, href: "#contact", label: "Email" },
+  { icon: MessageCircle, href: "https://wa.me/905316924944", label: "WhatsApp" },
+  { icon: Instagram, href: "https://www.instagram.com/montaser_haj_omar8?igsh=anBndDNoMmhnN2Fz", label: "Instagram" },
+  { icon: Facebook, href: "https://www.facebook.com/share/18GKrh5v9R/", label: "Facebook" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/montaser-haj-omar-b91841281?utm_source=share_via&utm_content=profile&utm_medium=member_android", label: "LinkedIn" },
 ];
 
 export function Footer() {

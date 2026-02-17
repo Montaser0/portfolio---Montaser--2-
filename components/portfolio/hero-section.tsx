@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, Github, Linkedin, Mail } from "lucide-react";
+import { ArrowDown, Linkedin, Instagram, Facebook, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 
@@ -69,25 +69,35 @@ export function HeroSection() {
 
             <div className="flex items-center gap-6 pt-4">
               <a
-                href="#"
+                href="https://wa.me/905316924944"
                 className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
-                aria-label="GitHub"
+                aria-label="WhatsApp"
+                title="WhatsApp"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <Github className="h-6 w-6" />
+                <MessageCircle className="h-6 w-6" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/montaser_haj_omar8?igsh=anBndDNoMmhnN2Fz"
+                className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
+                aria-label="Instagram"
+              >
+                <Instagram className="h-6 w-6" />
+              </a>
+              <a
+                href="https://www.facebook.com/share/18GKrh5v9R/"
+                className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
+                aria-label="Facebook"
+              >
+                <Facebook className="h-6 w-6" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/montaser-haj-omar-b91841281?utm_source=share_via&utm_content=profile&utm_medium=member_android"
                 className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
                 aria-label="LinkedIn"
               >
                 <Linkedin className="h-6 w-6" />
-              </a>
-              <a
-                href="#contact"
-                className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
-                aria-label="Email"
-              >
-                <Mail className="h-6 w-6" />
               </a>
             </div>
           </div>
