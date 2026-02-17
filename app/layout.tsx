@@ -14,26 +14,9 @@ const _ibmPlexArabic = IBM_Plex_Sans_Arabic({
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'مهندس برمجيات | Full-Stack & AI Developer',
-  description: 'معرض أعمال مهندس برمجيات متخصص في تطوير الواجهات الأمامية والخلفية وبناء وكلاء ذكاء اصطناعي',
-  generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
+  title: 'مهندس برمجيات | Full-Stack Developer',
+  description: 'مطور برمجيات متخصص في تطوير الواجهات الأمامية والخلفية وبناء وكلاء ذكاء اصطناعي',
+
 }
 
 export default function RootLayout({

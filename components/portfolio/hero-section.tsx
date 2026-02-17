@@ -37,7 +37,7 @@ export function HeroSection() {
                 منتصر الحاج عمر
               </h1>
               <p className="text-xl text-muted-foreground mt-2">
-                Full-Stack & AI Developer
+                Full-Stack Developer
               </p>
             </div>
 
