@@ -1,6 +1,7 @@
 "use client";
 
-import { Github, Linkedin, Twitter, Mail, MessageCircle } from "lucide-react";
+import { Github, Linkedin, Twitter, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const socialLinks = [
   { icon: Github, href: "#", label: "GitHub" },
@@ -41,34 +42,24 @@ export function Footer() {
           </div>
  
           <div className="flex flex-col items-center md:items-end gap-4">
-            <p className="text-base md:text-lg font-semibold text-primary">
-              تواصل معي الآن
-            </p>
-            <ul className="w-full max-w-sm space-y-3 text-muted-foreground">
-              <li className="flex items-center justify-center md:justify-end gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-primary">
-                  <MessageCircle className="h-5 w-5" />
-                </span>
+            <div>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="border-primary/50 text-foreground hover:bg-primary/10 bg-transparent transition-all"
+              >
                 <a
                   href="https://wa.me/905316924944"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-foreground"
                   aria-label="WhatsApp"
                   title="WhatsApp"
                 >
-                  واتساب: +905316924944
+                  تواصل معي
                 </a>
-              </li>
-              <li className="flex items-center justify-center md:justify-end gap-3">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-primary">
-                  <Mail className="h-5 w-5" />
-                </span>
-                <a href="#contact" className="hover:text-foreground">
-                  راسلني عبر البريد
-                </a>
-              </li>
-            </ul>
+              </Button>
+            </div>
           </div>
         </div>
  

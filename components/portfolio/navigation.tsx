@@ -61,8 +61,16 @@ export function Navigation() {
 
   {/* CTA Button - Left */}
   <div className="hidden md:block">
-    <Button className="rounded-md px-6">
-      لنبدأ بمشروعك
+    <Button asChild className="rounded-md px-6">
+      <a
+        href="https://wa.me/905316924944"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+        title="WhatsApp"
+      >
+        لنبدأ بمشروعك
+      </a>
     </Button>
   </div>
 
