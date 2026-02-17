@@ -63,7 +63,14 @@ export function HeroSection() {
                 className="border-primary/50 text-foreground hover:bg-primary/10 bg-transparent transition-all"
                 asChild
               >
-                <a href="#contact">تواصل معي</a>
+                <a
+                  href="https://wa.me/905316924944"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="WhatsApp"
+                >
+                  تواصل معي
+                </a>
               </Button>
             </div>
 
