@@ -144,27 +144,29 @@ export function ProjectsSection() {
                   <h3 className="text-lg font-semibold text-foreground mb-2">
                     {project.title}
                   </h3>
-                  <div className="flex items-center gap-2">
-                    <input
-                      id={`file-${project.id}`}
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(e) =>
-                        handleUpload(project.id, e.target.files?.[0] || null)
-                      }
-                    />
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      disabled={!!uploading[project.id]}
-                      onClick={() =>
-                        document.getElementById(`file-${project.id}`)?.click()
-                      }
-                    >
-                      {uploading[project.id] ? "جاري الرفع..." : "رفع صورة"}
-                    </Button>
-                  </div>
+                  {!imageOverrides[project.id] && (
+                    <div className="flex items-center gap-2">
+                      <input
+                        id={`file-${project.id}`}
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) =>
+                          handleUpload(project.id, e.target.files?.[0] || null)
+                        }
+                      />
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        disabled={!!uploading[project.id]}
+                        onClick={() =>
+                          document.getElementById(`file-${project.id}`)?.click()
+                        }
+                      >
+                        {uploading[project.id] ? "جاري الرفع..." : "رفع صورة"}
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 {/* CTA */}

@@ -19,7 +19,7 @@ const skillCategories = [
   {
     title: "لغات البرمجة",
     icon: Code2,
-    skills: ["Python", "JavaScript", "Java", "Dart", "SQL"],
+    skills: ["Python", "JavaScript", "Typescript" ,"Java", "Dart", "C#" ,"Php" ],
     color: "text-primary",
     bgColor: "bg-primary/10",
     borderColor: "hover:border-primary/50",
@@ -27,7 +27,7 @@ const skillCategories = [
   {
     title: "تطوير الويب",
     icon: Globe,
-    skills: ["React.js", "Next.js", "Flutter", "Laravel"],
+    skills: ["React.js", "Next.js", "Laravel"],
     color: "text-cyan-400",
     bgColor: "bg-cyan-400/10",
     borderColor: "hover:border-cyan-400/50",
