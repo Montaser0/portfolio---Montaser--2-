@@ -25,11 +25,11 @@ const skillCategories = [
   {
     title: "تطوير الويب",
     icon: Globe,
-    skills: ["React.js", "Next.js", "Laravel", "TailwindCSS"],
+    skills: ["React.js", "Next.js", "Laravel", "TailwindCSS" , "Bootstrap" , "MUI" , "Shadcn UI"],
     accentColor: "group-hover:text-chart-2",
   },
   {
-    title: "قواعد البيانات",
+    title: "قواعد البيانات والمنصات",
     icon: Database,
     skills: ["PostgreSQL", "MySQL", "Supabase", "Firebase", "MongoDB"],
     accentColor: "group-hover:text-chart-3",
