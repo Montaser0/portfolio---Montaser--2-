@@ -1,55 +1,63 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  Package,
-  Monitor,
-  Smartphone,
-  Cpu,
-  ArrowLeft,
-} from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { ArrowLeft, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { projects, type ProjectType } from "@/lib/projects-data";
-import {
-  type CarouselApi,
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
-/* ================== FILTERS ================== */
-
-const filters: { key: ProjectType; label: string; icon: typeof Monitor }[] = [
-  { key: "all", label: "الكل", icon: Package },
-  { key: "web", label: "ويب", icon: Monitor },
-  { key: "mobile", label: "موبايل", icon: Smartphone },
-  { key: "desktop", label: "سطح المكتب", icon: Monitor },
-  { key: "ai", label: "ذكاء اصطناعي", icon: Cpu },
-];
-
-/* ================== SECTION ================== */
+function AnimatedInView({
+  children,
+  from = "right",
+  className,
+}: {
+  children: React.ReactNode;
+  from?: "right" | "left";
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) setVisible(true);
+      },
+      { threshold: 0.15 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "transition-all duration-700 ease-out will-change-transform",
+        visible
+          ? "opacity-100 translate-x-0"
+          : from === "right"
+          ? "opacity-0 translate-x-10"
+          : "opacity-0 -translate-x-10",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
 
 export function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<ProjectType>("all");
-  const [uploading, setUploading] = useState<Record<string, boolean>>({});
   const [imageOverrides, setImageOverrides] = useState<Record<string, string>>({});
-  const [embla, setEmbla] = useState<CarouselApi | null>(null);
-  const [selectedSnap, setSelectedSnap] = useState(0);
-  const [perView, setPerView] = useState(1);
 
   useEffect(() => {
     const loadMappings = async () => {
       try {
         const res = await fetch("/api/project-images", { cache: "no-store" });
         if (res.ok) {
-          const data = (await res.json()) as Record<string, string>;
+          const data = await res.json();
           setImageOverrides(data || {});
         }
       } catch {}
@@ -57,203 +65,99 @@ export function ProjectsSection() {
     loadMappings();
   }, []);
 
-  useEffect(() => {
-    const updatePerView = () => {
-      const w = typeof window !== "undefined" ? window.innerWidth : 0;
-      if (w >= 1024) setPerView(3);
-      else if (w >= 768) setPerView(2);
-      else setPerView(1);
-    };
-    updatePerView();
-    window.addEventListener("resize", updatePerView);
-    return () => window.removeEventListener("resize", updatePerView);
-  }, []);
-
-  useEffect(() => {
-    if (!embla) return;
-    const onSelect = () => setSelectedSnap(embla.selectedScrollSnap());
-    onSelect();
-    embla.on("select", onSelect);
-    embla.on("reInit", onSelect);
-    return () => {
-      embla.off("select", onSelect);
-      embla.off("reInit", onSelect);
-    };
-  }, [embla]);
-
   const filteredProjects =
     activeFilter === "all"
       ? projects
       : projects.filter((p) => p.type === activeFilter);
 
-  async function handleUpload(projectId: string, file: File | null) {
-    if (!file) return;
-    setUploading((p) => ({ ...p, [projectId]: true }));
-    try {
-      const form = new FormData();
-      form.append("file", file);
-      form.append("projectId", projectId);
-      const res = await fetch("/api/upload", { method: "POST", body: form });
-      if (!res.ok) throw new Error("failed");
-      const data = (await res.json()) as { url?: string };
-      if (data?.url) {
-        setImageOverrides((prev) => ({ ...prev, [projectId]: data.url! }));
-      }
-      alert("تم رفع الصورة بنجاح");
-    } catch {
-      alert("فشل رفع الصورة");
-    } finally {
-      setUploading((p) => ({ ...p, [projectId]: false }));
-    }
-  }
-
   return (
-    <section id="projects" className="py-24">
+    <section id="projects" dir="rtl" className="py-32 bg-background">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
-            المشاريع
+        
+        {/* Header - Styled like your reference */}
+        <div className="mb-24 space-y-4 text-right">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary flex items-center justify-end gap-3">
+            <span className="opacity-30 font-light text-foreground">#</span>
+            أحدث الأعمال
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            بعض الأعمال التي نفذتها باستخدام تقنيات حديثة لحل مشاكل حقيقية
+          <p className="text-muted-foreground text-lg max-w-xl leading-relaxed">
+            استعراض للمشاريع التي تم تنفيذها، حيث تلتقي الدقة البرمجية بالتصميم الإبداعي.
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap justify-center gap-2 mb-14">
-          {filters.map((filter) => {
-            const Icon = filter.icon;
-            const active = activeFilter === filter.key;
+        {/* List of Projects with Alternating Layout */}
+        <div className="space-y-48">
+          {filteredProjects.map((project, index) => {
+            const isEven = index % 2 === 0;
+            const imgSrc = imageOverrides[project.id] ?? project.image;
 
             return (
-              <button
-                key={filter.key}
-                onClick={() => setActiveFilter(filter.key)}
+              <AnimatedInView
+                key={project.id}
+                from={isEven ? "right" : "left"}
                 className={cn(
-                  "flex items-center gap-2 px-4 py-2 rounded-md text-sm transition-colors",
-                  active
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                  "flex flex-col gap-16 items-center",
+                  isEven ? "md:flex-row" : "md:flex-row-reverse"
                 )}
               >
-                <Icon className="h-4 w-4" />
-                {filter.label}
-              </button>
+                {/* Image Section - This is where your photos go */}
+                <div className="relative w-full md:w-[60%] group">
+                  {/* Background decorative box */}
+                  <div className="absolute inset-0 bg-primary/20 translate-x-4 translate-y-4 rounded-2xl -z-10 group-hover:translate-x-2 group-hover:translate-y-2 transition-all duration-500" />
+                  
+                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border shadow-2xl bg-secondary/30">
+                    {imgSrc ? (
+                      <Image
+                        src={imgSrc} // سيأخذ الصورة من بياناتك أو الرابط المرفوع
+                        alt={project.title}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        unoptimized={true} // لضمان ظهور الصور الخارجية دون مشاكل في التحسين
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+                        <Plus className="text-muted-foreground/20" size={60} />
+                        <span className="text-xs font-mono opacity-20 tracking-widest">لا توجد صورة</span>
+                      </div>
+                    )}
+                    {/* شارة الفئة */}
+                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full border border-primary/30 bg-background/70 backdrop-blur-md text-primary text-[11px] font-bold tracking-wide">
+                      #{project.category}
+                    </span>
+                    {/* زر عرض العمل داخل الصورة */}
+                    <Link
+                      href={`/projects/${project.id}`}
+                      className="absolute bottom-3 right-3 inline-flex items-center gap-2 text-foreground/80 hover:text-primary transition-colors"
+                    >
+                      <span className="text-xs font-bold tracking-[0.2em]">عرض العمل</span>
+                      <span className="flex items-center justify-center w-9 h-9 rounded-full border border-border hover:border-primary hover:bg-primary/5 transition-all">
+                        <ArrowLeft size={16} />
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Text Content Section */}
+                <div className={cn(
+                  "w-full md:w-[40%] space-y-8",
+                  isEven ? "md:pr-12" : "md:pl-12"
+                )}>
+                  <div className="space-y-4 text-right">
+                    <h3 className="text-3xl md:text-4xl font-bold tracking-tight leading-[1.2] text-foreground">
+                      {project.title}
+                    </h3>
+                  </div>
+                  <p className="text-muted-foreground text-lg leading-relaxed text-right">
+                    {project.problem || "نقوم ببناء تجربة رقمية فريدة من خلال دمج التصميم الإبداعي مع الكود النظيف والمستقر."}
+                  </p>
+                </div>
+              </AnimatedInView>
             );
           })}
         </div>
 
-        <Carousel
-          key={activeFilter}
-          dir="rtl"
-          setApi={setEmbla}
-          opts={{ align: "start", loop: false, direction: "rtl" }}
-          className="relative"
-        >
-          <CarouselContent>
-            {filteredProjects.map((project) => (
-              <CarouselItem key={project.id} className="md:basis-1/2 lg:basis-1/3">
-                <Card className="border border-border hover:border-primary/40 transition-colors">
-                  <CardContent className="p-6 flex flex-col justify-between h-full">
-                    <div>
-                      {(() => {
-                        const imgSrc = imageOverrides[project.id] ?? project.image;
-                        return imgSrc ? (
-                          <div className="relative mb-4 rounded-md overflow-hidden aspect-video">
-                            <Image
-                              src={imgSrc}
-                              alt={project.title}
-                              fill
-                              sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
-                              className="object-cover"
-                              unoptimized
-                            />
-                          </div>
-                        ) : null;
-                      })()}
-                      <div className="flex items-center justify-between mb-4">
-                        <project.icon className="h-6 w-6 text-primary" />
-                        <Badge variant="secondary" className="text-xs">
-                          {project.category}
-                        </Badge>
-                      </div>
-                      <h3 className="text-lg font-semibold text-foreground mb-2">
-                        {project.title}
-                      </h3>
-                      {!imageOverrides[project.id] && (
-                        <div className="flex items-center gap-2">
-                          <input
-                            id={`file-${project.id}`}
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={(e) =>
-                              handleUpload(project.id, e.target.files?.[0] || null)
-                            }
-                          />
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            disabled={!!uploading[project.id]}
-                            onClick={() =>
-                              document.getElementById(`file-${project.id}`)?.click()
-                            }
-                          >
-                            {uploading[project.id] ? "جاري الرفع..." : "رفع صورة"}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                    <Link href={`/projects/${project.id}`} className="mt-6">
-                      <Button
-                        variant="outline"
-                        className="w-full flex items-center justify-center gap-2"
-                      >
-                        عرض التفاصيل
-                        <ArrowLeft className="h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious
-            className="-left-8 md:-left-12 size-12 md:size-10 bg-background/90 border border-[var(--chart-1)] text-[var(--chart-1)] shadow-lg hover:bg-background z-20"
-          />
-          <CarouselNext
-            className="-right-8 md:-right-12 size-12 md:size-10 bg-background/90 border border-[var(--chart-2)] text-[var(--chart-2)] shadow-lg hover:bg-background z-20"
-          />
-        </Carousel>
-        {filteredProjects.length > 0 && (
-          <div className="mt-6 flex items-center justify-center gap-2">
-            {Array.from(
-              { length: Math.max(1, Math.ceil(filteredProjects.length / perView)) },
-              (_, i) => (
-                <button
-                  key={i}
-                  onClick={() => embla?.scrollTo(i * perView)}
-                  className={cn(
-                    "px-3 py-1 rounded-md border text-sm",
-                    Math.floor(selectedSnap / perView) === i
-                      ? "border-primary text-foreground"
-                      : "border-border text-muted-foreground hover:text-foreground"
-                  )}
-                >
-                  {i + 1}
-                </button>
-              )
-            )}
-          </div>
-        )}
-
-        {/* Empty */}
-        {filteredProjects.length === 0 && (
-          <p className="text-center text-muted-foreground mt-16">
-            لا توجد مشاريع في هذه الفئة حالياً
-          </p>
-        )}
+        {/* Footer Design - #Lab; */}
+     
       </div>
     </section>
   );

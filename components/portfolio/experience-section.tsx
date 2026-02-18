@@ -129,14 +129,31 @@ export function ExperienceSection() {
                   </p>
                 </div>
 
-                <ul className="list-disc list-inside space-y-2 text-foreground">
-                  <li>مدرب حاسوب وبرمجة - منظمة عدالة (2025)</li>
-                  <li>كورسات أونلاين</li>
-                  <li>مدرب حاسوب وتطبيقات جوجل - يونس ايمره (2024-الآن)</li>
-                  <li>مطور برمجيات - شركة ماس (2024)</li>
-                  <li>مدرب برمجة - مدرسة القلم النموذجية (2024)</li>
-                  <li> تقني - شركة يوناتيد (2023)</li>
-                </ul>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[
+                    { year: "2025", title: "مدرب حاسوب وبرمجة", place: "منظمة عدالة" },
+                    { year: "مستمر", title: "كورسات أونلاين", place: "تعلم ذاتي" },
+                    { year: "2024-الآن", title: "مدرب حاسوب وتطبيقات جوجل", place: "يونس ايمره" },
+                    { year: "2024", title: "مطور برمجيات", place: "شركة ماس" },
+                    { year: "2024", title: "مدرب برمجة", place: "مدرسة القلم النموذجية" },
+                    { year: "2023", title: "تقني", place: "شركة يوناتيد" },
+                  ].map((exp) => (
+                    <div
+                      key={`${exp.title}-${exp.year}`}
+                      className="bg-gradient-to-b from-card/70 to-card/40 rounded-xl border border-border hover:border-primary/40 transition-colors p-5"
+                    >
+                      <div className="text-primary/90 text-2xl font-extrabold mb-2">
+                        {exp.year}
+                      </div>
+                      <div className="text-foreground font-semibold">
+                        {exp.title}
+                      </div>
+                      <div className="text-muted-foreground text-sm mt-1">
+                        {exp.place}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </CardContent>
           </Card>
