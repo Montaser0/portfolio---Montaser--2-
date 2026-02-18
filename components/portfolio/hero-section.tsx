@@ -103,7 +103,7 @@ export function HeroSection() {
           </div>
 
           {/* 3D Visual Element */}
-          <div className="relative block h-64 sm:h-72 md:h-96 lg:h-[500px]">
+          <div className="relative block order-2 lg:order-none h-64 sm:h-72 md:h-96 lg:h-[500px] overflow-hidden mt-6 pointer-events-none md:pointer-events-auto">
             <CodeScene3D />
           </div>
         </div>
