@@ -38,8 +38,8 @@ function AnimatedInView({
         visible
           ? "opacity-100 translate-x-0"
           : from === "right"
-          ? "opacity-0 translate-x-10"
-          : "opacity-0 -translate-x-10",
+          ? "opacity-0 translate-x-100"
+          : "opacity-0 -translate-x-100",
         className
       )}
     >
@@ -75,12 +75,12 @@ export function ProjectsSection() {
       <div className="max-w-6xl mx-auto px-6">
         
         {/* Header - Styled like your reference */}
-        <div className="mb-24 space-y-4 text-right">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary flex items-center justify-end gap-3">
+        <div className="mb-24 space-y-4 text-left">
+          <h2 className="text-4xl md:text-5xl font-bold text-primary flex items-center justify-start gap-3">
             <span className="opacity-30 font-light text-foreground">#</span>
             أحدث الأعمال
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl leading-relaxed">
+          <p className="text-muted-foreground text-lg max-w-xl leading-relaxed text-left">
             استعراض للمشاريع التي تم تنفيذها، حيث تلتقي الدقة البرمجية بالتصميم الإبداعي.
           </p>
         </div>

@@ -7,6 +7,7 @@ import {
   Users,
   CheckCircle2,
   ArrowLeft,
+  Quote,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -93,79 +94,40 @@ export function ExperienceSection() {
           ))}
         </div>
 
-        {/* Values & Experience */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Values */}
-          <Card className="bg-card border-border">
-            <CardContent className="p-8">
-              <h3 className="text-xl font-bold text-foreground mb-6">
-                القيم التي أعمل بها
-              </h3>
-              <ul className="space-y-4">
-                {values.map((value) => (
-                  <li key={value} className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-muted-foreground">{value}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
 
-          {/* Experience Summary */}
-          <Card className="bg-card border-border">
-            <CardContent className="p-8">
-              <h3 className="text-xl font-bold text-foreground mb-6">
-                الخبرة العملية
-              </h3>
-              <div className="space-y-6">
-                <div className="border-r-2 border-primary pr-4">
-                  <p className="text-sm text-primary mb-1">2023 - الآن</p>
-                  <h4 className="font-semibold text-foreground">
-                    مطور برمجيات مستقل
-                  </h4>
-                  <p className="text-muted-foreground text-sm mt-1">
-                    العمل مع شركات ناشئة ومؤسسات على مشاريع ويب وذكاء اصطناعي
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {[
-                    { year: "2025", title: "مدرب حاسوب وبرمجة", place: "منظمة عدالة" },
-                    { year: "مستمر", title: "كورسات أونلاين", place: "تعلم ذاتي" },
-                    { year: "2024-الآن", title: "مدرب حاسوب وتطبيقات جوجل", place: "يونس ايمره" },
-                    { year: "2024", title: "مطور برمجيات", place: "شركة ماس" },
-                    { year: "2024", title: "مدرب برمجة", place: "مدرسة القلم النموذجية" },
-                    { year: "2023", title: "تقني", place: "شركة يوناتيد" },
-                  ].map((exp) => (
-                    <div
-                      key={`${exp.title}-${exp.year}`}
-                      className="bg-gradient-to-b from-card/70 to-card/40 rounded-xl border border-border hover:border-primary/40 transition-colors p-5"
-                    >
-                      <div className="text-primary/90 text-2xl font-extrabold mb-2">
-                        {exp.year}
-                      </div>
-                      <div className="text-foreground font-semibold">
-                        {exp.title}
-                      </div>
-                      <div className="text-muted-foreground text-sm mt-1">
-                        {exp.place}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
 
         {/* Quote */}
-        {/* <div className="mt-16 text-center">
-          <blockquote className="text-xl md:text-2xl text-foreground italic max-w-3xl mx-auto">
-            {'"'}أؤمن بأن أفضل الحلول التقنية هي التي تجمع بين البساطة والذكاء -
-            كود نظيف، تجربة مستخدم سلسة، وذكاء اصطناعي يضيف قيمة حقيقية.{'"'}
-          </blockquote>
-        </div> */}
+        {/* قسم المقولة بتصميم مطور */}
+        <div className="mt-32 relative max-w-4xl mx-auto px-6">
+          {/* علامة اقتباس خلفية ضخمة لتعزيز التصميم */}
+          <Quote
+            className="absolute -top-12 -right-4 size-32 text-primary opacity-[0.03] rotate-12 -z-10"
+            strokeWidth={1}
+          />
+
+          <div className="relative border-r-2 border-primary/30 pr-8 py-4">
+            <blockquote className="space-y-6">
+              <p className="text-2xl md:text-3xl font-medium text-foreground leading-[1.6] tracking-tight">
+                "أؤمن بأن أفضل الحلول التقنية هي التي تجمع بين
+                <span className="text-primary italic"> البساطة والذكاء </span>
+                — كود نظيف، تجربة مستخدم سلسة، وذكاء اصطناعي يضيف قيمة حقيقية."
+              </p>
+
+              <footer className="flex items-center gap-4">
+                <div className="h-[1px] w-12 bg-primary/50"></div>
+                <cite className="text-sm font-mono uppercase tracking-[0.3em] text-muted-foreground not-italic">
+                  Montaser <span className="text-primary/60">/</span> Full-Stack Developer
+                </cite>
+              </footer>
+            </blockquote>
+          </div>
+
+          {/* علامة اقتباس سفلية لإتمام التوازن البصري */}
+          <Quote
+            className="absolute -bottom-12 -left-4 size-24 text-primary opacity-[0.03] -rotate-12 -z-10"
+            strokeWidth={1}
+          />
+        </div>
       </div>
     </section>
   );

@@ -56,15 +56,15 @@ const experiences = [
 
 export function ExperienceSection1() {
   return (
-    <section id="experience" className="py-32 bg-background">
+    <section id="experience" dir="rtl" className="py-32 bg-background">
       <div className="max-w-6xl mx-auto px-6">
         {/* Header - متناسق مع تصميم الهوية */}
         <div className="mb-20 text-right">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6 flex items-center justify-start gap-3 flex-row-reverse">
-            Career Journey
+          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6 flex items-center justify-end gap-3 flex-row-reverse">
+            المسيرة المهنية
             <span className="opacity-20 text-foreground font-light">/</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mr-0 ml-auto leading-relaxed">
+          <p className="text-muted-foreground text-lg max-w-2xl mr-0 ml-auto leading-relaxed text-right">
             محطات من الخبرة العملية والتدريب التقني، أسعى من خلالها لترك أثر رقمي ملموس ونقل المعرفة البرمجية.
           </p>
         </div>

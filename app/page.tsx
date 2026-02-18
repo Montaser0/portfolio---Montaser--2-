@@ -14,6 +14,7 @@ export default function PortfolioPage() {
       <SkillsSection />
       <ProjectsSection />
       <ExperienceSection1 />
+      <ExperienceSection />
       <Footer />
     </main>
   );
