@@ -10,6 +10,42 @@ import {
   Quote,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+
+function AnimatedInOut({
+  children,
+  from = "top",
+  className,
+}: {
+  children: ReactNode;
+  from?: "top" | "bottom";
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0.2 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className={[
+        "transition-all duration-700 ease-out will-change-transform",
+        visible ? "opacity-100 translate-y-0" : from === "top" ? "-translate-y-80 opacity-0" : "translate-y-80 opacity-0",
+        className ?? "",
+      ].join(" ")}
+    >
+      {children}
+    </div>
+  );
+}
 
 const workProcess = [
   {
@@ -67,30 +103,29 @@ export function ExperienceSection() {
         {/* Work Process */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
           {workProcess.map((item, index) => (
-            <Card
-              key={item.step}
-              className="bg-card border-border hover:border-primary/50 transition-all duration-300 relative group"
-            >
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-4xl font-bold text-primary/20 group-hover:text-primary/40 transition-colors">
-                    {item.step}
-                  </span>
-                  <item.icon className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-semibold text-foreground text-lg mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-muted-foreground text-sm">
-                  {item.description}
-                </p>
-              </CardContent>
-              {index < workProcess.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -left-3 transform -translate-y-1/2">
-                  <ArrowLeft className="h-5 w-5 text-border" />
-                </div>
-              )}
-            </Card>
+            <AnimatedInOut key={item.step} from={index % 2 === 0 ? "top" : "bottom"}>
+              <Card className="bg-card border-border hover:border-primary/50 transition-all duration-300 relative group">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-4xl font-bold text-primary/20 group-hover:text-primary/40 transition-colors">
+                      {item.step}
+                    </span>
+                    <item.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-foreground text-lg mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm">
+                    {item.description}
+                  </p>
+                </CardContent>
+                {index < workProcess.length - 1 && (
+                  <div className="hidden lg:block absolute top-1/2 -left-3 transform -translate-y-1/2">
+                    <ArrowLeft className="h-5 w-5 text-border" />
+                  </div>
+                )}
+              </Card>
+            </AnimatedInOut>
           ))}
         </div>
 
@@ -98,7 +133,8 @@ export function ExperienceSection() {
 
         {/* Quote */}
         {/* قسم المقولة بتصميم مطور */}
-        <div className="mt-32 relative max-w-4xl mx-auto px-6">
+        <AnimatedInOut from="bottom" className="mt-32">
+          <div className="relative max-w-4xl mx-auto px-6">
           {/* علامة اقتباس خلفية ضخمة لتعزيز التصميم */}
           <Quote
             className="absolute -top-12 -right-4 size-32 text-primary opacity-[0.03] rotate-12 -z-10"
@@ -115,8 +151,8 @@ export function ExperienceSection() {
 
               <footer className="flex items-center gap-4">
                 <div className="h-[1px] w-12 bg-primary/50"></div>
-                <cite className="text-sm font-mono uppercase tracking-[0.3em] text-muted-foreground not-italic">
-                  Montaser <span className="text-primary/60">/</span> Full-Stack Developer
+                <cite className="text-sm tracking-[0.3em] text-muted-foreground not-italic">
+                  منتصر الحاج عمر <span className="text-primary/60">/</span> مطوّر فل ستاك
                 </cite>
               </footer>
             </blockquote>
@@ -127,7 +163,8 @@ export function ExperienceSection() {
             className="absolute -bottom-12 -left-4 size-24 text-primary opacity-[0.03] -rotate-12 -z-10"
             strokeWidth={1}
           />
-        </div>
+          </div>
+        </AnimatedInOut>
       </div>
     </section>
   );

@@ -1,6 +1,48 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useEffect, useRef, useState } from "react";
+
+function AnimatedInOut({
+  children,
+  from = "top",
+  className,
+}: {
+  children: React.ReactNode;
+  from?: "top" | "bottom";
+  className?: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setVisible(entry.isIntersecting);
+      },
+      { threshold: 0.2 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        "transition-all duration-700 ease-out will-change-transform",
+        visible
+          ? "opacity-100 translate-y-0"
+          : from === "top"
+          ? "-translate-y-80 opacity-0"
+          : "translate-y-80 opacity-0",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
 
 const experiences = [
   {
@@ -72,38 +114,42 @@ export function ExperienceSection1() {
         {/* Dynamic Experience Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
           {experiences.map((exp, index) => (
-            <div
+            <AnimatedInOut
               key={index}
-              className={cn(
-                "relative group p-8 rounded-2xl transition-all duration-500",
-                "bg-gradient-to-br from-card to-card/50 border border-white/[0.05]",
-                "hover:border-primary/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:-translate-y-2",
-                index % 2 === 0 ? "lg:mt-12" : "lg:mt-0"
-              )}
+              from={index % 2 === 0 ? "top" : "bottom"}
             >
-              {/* Year - بارز بلون السيان كما في الصورة */}
-              <div className="text-primary text-3xl font-black mb-6 tracking-tighter transition-transform group-hover:scale-110 origin-right">
-                {exp.year}
-              </div>
+              <div
+                className={cn(
+                  "relative group p-8 rounded-2xl transition-all duration-500",
+                  "bg-gradient-to-br from-card to-card/50 border border-white/[0.05]",
+                  "hover:border-primary/30 hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)] hover:-translate-y-2",
+                  index % 2 === 0 ? "lg:mt-12" : "lg:mt-0"
+                )}
+              >
+                {/* Year - بارز بلون السيان كما في الصورة */}
+                <div className="text-primary text-3xl font-black mb-6 tracking-tighter transition-transform group-hover:scale-110 origin-right">
+                  {exp.year}
+                </div>
 
-              {/* Title & Place */}
-              <div className="space-y-3 mb-6">
-                <h3 className="text-xl font-bold text-foreground leading-tight">
-                  {exp.title}
-                </h3>
-                <p className="text-primary/70 text-xs font-mono uppercase tracking-widest">
-                  {exp.place}
+                {/* Title & Place */}
+                <div className="space-y-3 mb-6">
+                  <h3 className="text-xl font-bold text-foreground leading-tight">
+                    {exp.title}
+                  </h3>
+                  <p className="text-primary/70 text-xs font-mono uppercase tracking-widest">
+                    {exp.place}
+                  </p>
+                </div>
+
+                {/* Description - نص باهت قليلاً كما في الصورة */}
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  {exp.description}
                 </p>
+
+                {/* Bottom Glow Effect */}
+                <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>
-
-              {/* Description - نص باهت قليلاً كما في الصورة */}
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                {exp.description}
-              </p>
-
-              {/* Bottom Glow Effect */}
-              <div className="absolute inset-x-0 bottom-0 h-1 bg-gradient-to-r from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            </div>
+            </AnimatedInOut>
           ))}
         </div>
 

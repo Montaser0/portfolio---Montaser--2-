@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type MouseEvent } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -14,6 +14,19 @@ const navLinks = [
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleNavClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const target = document.querySelector(href) as HTMLElement | null;
+    if (target) {
+      const header = document.querySelector("nav") as HTMLElement | null;
+      const offset = header?.offsetHeight ?? 80;
+      const top = target.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: "smooth" });
+      history.replaceState(null, "", href);
+    }
+    setIsOpen(false);
+  };
 
   // منع تمرير الصفحة عند فتح القائمة لتجربة استخدام أفضل
   useEffect(() => {
@@ -45,6 +58,7 @@ export function Navigation() {
       <a
         key={link.href}
         href={link.href}
+        onClick={(e) => handleNavClick(e, link.href)}
         className="
           relative px-4 py-2 text-sm font-medium text-muted-foreground
           transition-all duration-300
@@ -108,6 +122,7 @@ export function Navigation() {
               <a
                 key={link.href}
                 href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
                 className={`text-2xl font-semibold text-foreground hover:text-primary transition-all duration-300 transform ${isOpen
                     ? "translate-y-0 opacity-100"
                     : "translate-y-8 opacity-0"
@@ -115,7 +130,6 @@ export function Navigation() {
                 style={{
                   transitionDelay: isOpen ? `${index * 100}ms` : "0ms",
                 }}
-                onClick={() => setIsOpen(false)}
               >
                 {link.label}
               </a>
