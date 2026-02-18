@@ -103,7 +103,7 @@ export function HeroSection() {
           </div>
 
           {/* 3D Visual Element */}
-          <div className="relative hidden lg:block h-[500px]">
+          <div className="relative block h-64 sm:h-72 md:h-96 lg:h-[500px]">
             <CodeScene3D />
           </div>
         </div>

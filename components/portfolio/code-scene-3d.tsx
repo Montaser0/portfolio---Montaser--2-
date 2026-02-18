@@ -105,7 +105,7 @@ export function CodeScene3D() {
     }
   }, [typed.length]);
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-64 sm:h-72 md:h-full">
       <div className="absolute -inset-6 bg-gradient-to-tr from-primary/20 via-cyan-500/10 to-transparent blur-3xl rounded-3xl" />
       <div className="relative h-full rounded-xl border border-border/70 bg-background/40 backdrop-blur-md shadow-xl overflow-hidden">
         <div className="flex items-center gap-2 px-4 py-2 border-b border-border/60 bg-muted/30">
