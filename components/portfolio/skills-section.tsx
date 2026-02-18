@@ -12,6 +12,15 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 /* ================== DATA ================== */
 
@@ -112,6 +121,34 @@ function AnimatedCard({
 /* ================== SECTION ================== */
 
 export function SkillsSection() {
+  const [embla, setEmbla] = useState<CarouselApi | null>(null);
+  const [selectedSnap, setSelectedSnap] = useState(0);
+  const [perView, setPerView] = useState(1);
+
+  useEffect(() => {
+    const updatePerView = () => {
+      const w = typeof window !== "undefined" ? window.innerWidth : 0;
+      if (w >= 1024) setPerView(3);
+      else if (w >= 768) setPerView(2);
+      else setPerView(1);
+    };
+    updatePerView();
+    window.addEventListener("resize", updatePerView);
+    return () => window.removeEventListener("resize", updatePerView);
+  }, []);
+
+  useEffect(() => {
+    if (!embla) return;
+    const onSelect = () => setSelectedSnap(embla.selectedScrollSnap());
+    onSelect();
+    embla.on("select", onSelect);
+    embla.on("reInit", onSelect);
+    return () => {
+      embla.off("select", onSelect);
+      embla.off("reInit", onSelect);
+    };
+  }, [embla]);
+
   return (
     <section
       id="skills"
@@ -133,69 +170,92 @@ export function SkillsSection() {
           </p>
         </div>
 
-        {/* Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {skillCategories.map((cat, index) => (
-            <AnimatedCard key={cat.title} delay={index * 120}>
-              <Card
-                className={`
-                  relative overflow-hidden
-                  bg-card/40 backdrop-blur-xl
-                  border border-border
-                  ${cat.borderColor}
-                  transition-all duration-500
-                  group
-                  hover:-translate-y-2
-                  hover:shadow-2xl hover:shadow-primary/10
-                `}
+        <Carousel
+          dir="rtl"
+          setApi={setEmbla}
+          opts={{ align: "start", loop: false, direction: "rtl" }}
+          className="relative"
+        >
+          <CarouselContent>
+            {skillCategories.map((cat, index) => (
+              <CarouselItem key={cat.title} className="md:basis-1/2 lg:basis-1/3">
+                <AnimatedCard delay={index * 120}>
+                  <Card
+                    className={`
+                      relative overflow-hidden
+                      bg-card/40 backdrop-blur-xl
+                      border border-border
+                      ${cat.borderColor}
+                      transition-all duration-500
+                      group
+                      hover:-translate-y-2
+                      hover:shadow-2xl hover:shadow-primary/10
+                    `}
+                  >
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-primary/5 via-transparent to-cyan-400/5" />
+                    <CardContent className="relative p-6">
+                      <div className="flex items-start gap-4 mb-4">
+                        <div
+                          className={`
+                            p-3 rounded-2xl
+                            ${cat.bgColor}
+                            ring-1 ring-white/10
+                            group-hover:rotate-6 group-hover:scale-125
+                            transition-all duration-500
+                          `}
+                        >
+                          <cat.icon className={`h-6 w-6 ${cat.color}`} />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg text-foreground">
+                            {cat.title}
+                          </h3>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {cat.skills.map((skill) => (
+                          <Badge
+                            key={skill}
+                            variant="secondary"
+                            className="
+                              bg-secondary/60 backdrop-blur-md
+                              border border-border/50
+                              hover:bg-primary/20 hover:border-primary/40
+                              transition-all duration-300
+                              hover:scale-110
+                            "
+                          >
+                            {skill}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </AnimatedCard>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-8 md:-left-12 size-12 md:size-10 bg-background/90 border border-[var(--chart-1)] text-[var(--chart-1)] shadow-lg hover:bg-background z-20" />
+          <CarouselNext className="-right-8 md:-right-12 size-12 md:size-10 bg-background/90 border border-[var(--chart-2)] text-[var(--chart-2)] shadow-lg hover:bg-background z-20" />
+        </Carousel>
+        <div className="mt-6 flex items-center justify-center gap-2">
+          {Array.from(
+            { length: Math.max(1, Math.ceil(skillCategories.length / perView)) },
+            (_, i) => (
+              <button
+                key={i}
+                onClick={() => embla?.scrollTo(i * perView)}
+                className={cn(
+                  "px-3 py-1 rounded-md border text-sm",
+                  Math.floor(selectedSnap / perView) === i
+                    ? "border-primary text-foreground"
+                    : "border-border text-muted-foreground hover:text-foreground",
+                )}
               >
-                {/* hover glow */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500
-                                bg-gradient-to-br from-primary/5 via-transparent to-cyan-400/5" />
-
-                <CardContent className="relative p-6">
-                  <div className="flex items-start gap-4 mb-4">
-                    <div
-                      className={`
-                        p-3 rounded-2xl
-                        ${cat.bgColor}
-                        ring-1 ring-white/10
-                        group-hover:rotate-6 group-hover:scale-125
-                        transition-all duration-500
-                      `}
-                    >
-                      <cat.icon className={`h-6 w-6 ${cat.color}`} />
-                    </div>
-
-                    <div>
-                      <h3 className="font-semibold text-lg text-foreground">
-                        {cat.title}
-                      </h3>
-
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {cat.skills.map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant="secondary"
-                        className="
-                          bg-secondary/60 backdrop-blur-md
-                          border border-border/50
-                          hover:bg-primary/20 hover:border-primary/40
-                          transition-all duration-300
-                          hover:scale-110
-                        "
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </AnimatedCard>
-          ))}
+                {i + 1}
+              </button>
+            ),
+          )}
         </div>
 
         {/* Summary */}

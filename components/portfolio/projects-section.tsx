@@ -15,6 +15,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { projects, type ProjectType } from "@/lib/projects-data";
+import {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 /* ================== FILTERS ================== */
 
@@ -32,6 +40,9 @@ export function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<ProjectType>("all");
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
   const [imageOverrides, setImageOverrides] = useState<Record<string, string>>({});
+  const [embla, setEmbla] = useState<CarouselApi | null>(null);
+  const [selectedSnap, setSelectedSnap] = useState(0);
+  const [perView, setPerView] = useState(1);
 
   useEffect(() => {
     const loadMappings = async () => {
@@ -45,6 +56,30 @@ export function ProjectsSection() {
     };
     loadMappings();
   }, []);
+
+  useEffect(() => {
+    const updatePerView = () => {
+      const w = typeof window !== "undefined" ? window.innerWidth : 0;
+      if (w >= 1024) setPerView(3);
+      else if (w >= 768) setPerView(2);
+      else setPerView(1);
+    };
+    updatePerView();
+    window.addEventListener("resize", updatePerView);
+    return () => window.removeEventListener("resize", updatePerView);
+  }, []);
+
+  useEffect(() => {
+    if (!embla) return;
+    const onSelect = () => setSelectedSnap(embla.selectedScrollSnap());
+    onSelect();
+    embla.on("select", onSelect);
+    embla.on("reInit", onSelect);
+    return () => {
+      embla.off("select", onSelect);
+      embla.off("reInit", onSelect);
+    };
+  }, [embla]);
 
   const filteredProjects =
     activeFilter === "all"
@@ -109,80 +144,109 @@ export function ProjectsSection() {
           })}
         </div>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.map((project) => (
-            <Card
-              key={project.id}
-              className="border border-border hover:border-primary/40 transition-colors"
-            >
-              <CardContent className="p-6 flex flex-col justify-between h-full">
-                {/* Top */}
-                <div>
-                  {(() => {
-                    const imgSrc = imageOverrides[project.id] ?? project.image;
-                    return imgSrc ? (
-                      <div className="relative mb-4 rounded-md overflow-hidden aspect-video">
-                        <Image
-                          src={imgSrc}
-                          alt={project.title}
-                          fill
-                          sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
-                          className="object-cover"
-                          unoptimized
-                        />
+        <Carousel
+          key={activeFilter}
+          dir="rtl"
+          setApi={setEmbla}
+          opts={{ align: "start", loop: false, direction: "rtl" }}
+          className="relative"
+        >
+          <CarouselContent>
+            {filteredProjects.map((project) => (
+              <CarouselItem key={project.id} className="md:basis-1/2 lg:basis-1/3">
+                <Card className="border border-border hover:border-primary/40 transition-colors">
+                  <CardContent className="p-6 flex flex-col justify-between h-full">
+                    <div>
+                      {(() => {
+                        const imgSrc = imageOverrides[project.id] ?? project.image;
+                        return imgSrc ? (
+                          <div className="relative mb-4 rounded-md overflow-hidden aspect-video">
+                            <Image
+                              src={imgSrc}
+                              alt={project.title}
+                              fill
+                              sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
+                              className="object-cover"
+                              unoptimized
+                            />
+                          </div>
+                        ) : null;
+                      })()}
+                      <div className="flex items-center justify-between mb-4">
+                        <project.icon className="h-6 w-6 text-primary" />
+                        <Badge variant="secondary" className="text-xs">
+                          {project.category}
+                        </Badge>
                       </div>
-                    ) : null;
-                  })()}
-                  <div className="flex items-center justify-between mb-4">
-                    <project.icon className="h-6 w-6 text-primary" />
-                    <Badge variant="secondary" className="text-xs">
-                      {project.category}
-                    </Badge>
-                  </div>
-
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
-                    {project.title}
-                  </h3>
-                  {!imageOverrides[project.id] && (
-                    <div className="flex items-center gap-2">
-                      <input
-                        id={`file-${project.id}`}
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) =>
-                          handleUpload(project.id, e.target.files?.[0] || null)
-                        }
-                      />
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        disabled={!!uploading[project.id]}
-                        onClick={() =>
-                          document.getElementById(`file-${project.id}`)?.click()
-                        }
-                      >
-                        {uploading[project.id] ? "جاري الرفع..." : "رفع صورة"}
-                      </Button>
+                      <h3 className="text-lg font-semibold text-foreground mb-2">
+                        {project.title}
+                      </h3>
+                      {!imageOverrides[project.id] && (
+                        <div className="flex items-center gap-2">
+                          <input
+                            id={`file-${project.id}`}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) =>
+                              handleUpload(project.id, e.target.files?.[0] || null)
+                            }
+                          />
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            disabled={!!uploading[project.id]}
+                            onClick={() =>
+                              document.getElementById(`file-${project.id}`)?.click()
+                            }
+                          >
+                            {uploading[project.id] ? "جاري الرفع..." : "رفع صورة"}
+                          </Button>
+                        </div>
+                      )}
                     </div>
+                    <Link href={`/projects/${project.id}`} className="mt-6">
+                      <Button
+                        variant="outline"
+                        className="w-full flex items-center justify-center gap-2"
+                      >
+                        عرض التفاصيل
+                        <ArrowLeft className="h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious
+            className="-left-8 md:-left-12 size-12 md:size-10 bg-background/90 border border-[var(--chart-1)] text-[var(--chart-1)] shadow-lg hover:bg-background z-20"
+          />
+          <CarouselNext
+            className="-right-8 md:-right-12 size-12 md:size-10 bg-background/90 border border-[var(--chart-2)] text-[var(--chart-2)] shadow-lg hover:bg-background z-20"
+          />
+        </Carousel>
+        {filteredProjects.length > 0 && (
+          <div className="mt-6 flex items-center justify-center gap-2">
+            {Array.from(
+              { length: Math.max(1, Math.ceil(filteredProjects.length / perView)) },
+              (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => embla?.scrollTo(i * perView)}
+                  className={cn(
+                    "px-3 py-1 rounded-md border text-sm",
+                    Math.floor(selectedSnap / perView) === i
+                      ? "border-primary text-foreground"
+                      : "border-border text-muted-foreground hover:text-foreground"
                   )}
-                </div>
-
-                {/* CTA */}
-                <Link href={`/projects/${project.id}`} className="mt-6">
-                  <Button
-                    variant="outline"
-                    className="w-full flex items-center justify-center gap-2"
-                  >
-                    عرض التفاصيل
-                    <ArrowLeft className="h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                >
+                  {i + 1}
+                </button>
+              )
+            )}
+          </div>
+        )}
 
         {/* Empty */}
         {filteredProjects.length === 0 && (
