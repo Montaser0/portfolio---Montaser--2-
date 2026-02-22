@@ -88,3 +88,25 @@
     @apply bg-background text-foreground;
   }
 }
+
+:root {
+  --pattern-color-1: var(--muted-foreground);
+  --pattern-color-2: var(--accent);
+  --pattern-opacity-1: 0.14;
+  --pattern-opacity-2: 0.18;
+  --pattern-opacity-3: 0.1;
+  --pattern-speed-1: 0.3;
+  --pattern-speed-2: 0.6;
+  --pattern-speed-3: 0.9;
+  --pattern-intensity: 1;
+  --pattern-scale: 1;
+  --network-line-color: color-mix(in oklab, var(--accent), white 10%);
+  --network-node-color: color-mix(in oklab, var(--accent), white 20%);
+  --network-line-opacity: 0.25;
+  --network-node-opacity: 0.9;
+  --network-node-size: 1.2;
+  --network-neighbors: 3;
+  --network-speed: 0.25;
+  --network-density: 0.00006;
+  --network-layer-opacity: 0.5;
+}

@@ -1,8 +1,9 @@
 import React from "react"
-import type { Metadata, Viewport } from 'next'
+import type { Metadata } from 'next'
 import { IBM_Plex_Sans_Arabic, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import PatternBackground from '@/components/portfolio/pattern-background'
 
 // تفعيل خط IBM Plex Sans Arabic بأوزان كاملة مع عرض swap وتعيين متغير CSS للاستخدام العام
 const _ibmPlexArabic = IBM_Plex_Sans_Arabic({
@@ -19,13 +20,6 @@ export const metadata: Metadata = {
 
 }
 
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 1,
-  viewportFit: 'cover',
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -33,8 +27,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
-      {/* ربط متغير الخط على مستوى body لتطبيقه على كامل الموقع */}
       <body className={`${_ibmPlexArabic.variable} font-sans antialiased`}>
+        <PatternBackground />
         {children}
         <Analytics />
       </body>
