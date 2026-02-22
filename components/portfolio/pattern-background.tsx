@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 
 type Node = { x: number; y: number; vx: number; vy: number }
 
-export default function PatternBackground() {
+export default function PatternBackground({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -148,7 +148,7 @@ export default function PatternBackground() {
   return (
     <div
       aria-hidden="true"
-      className="fixed inset-0 z-0 pointer-events-none select-none"
+      className={className ?? 'fixed inset-0 z-0 pointer-events-none select-none'}
       style={{ opacity: 'var(--network-layer-opacity, 0.5)' }}
     >
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
