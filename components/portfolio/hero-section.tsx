@@ -54,7 +54,7 @@ export function HeroSection() {
             <div className="flex flex-wrap gap-4">
               <Button
                 size="lg"
-                className="bg-gradient-to-l from-primary to-cyan-500 text-primary-foreground hover:opacity-90 transition-opacity"
+                className="bg-gradient-to-l from-primary to-chart-2 text-primary-foreground hover:opacity-90 transition-opacity"
                 asChild
               >
                 <a href="#projects">استعرض أعمالي</a>
