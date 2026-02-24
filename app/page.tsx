@@ -8,7 +8,7 @@ import { ExperienceSection1 } from "@/components/portfolio/exp";
 
 export default function PortfolioPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background overflow-x-hidden">
       <Navigation />
       <HeroSection />
       <SkillsSection />
