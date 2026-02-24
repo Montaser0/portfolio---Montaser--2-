@@ -229,6 +229,38 @@ export const projects: Project[] = [
       "تقييم الخدمة والأطباء",
     ],
   },
+  {
+    id: "meditro",
+    title: "منصة تعريف وحجز لمراكز صحية (Meditro)",
+    category: "تطبيقات ويب",
+    type: "web",
+    icon: Calendar,
+    problem:
+      "الحاجة لواجهة ويب تعريفية مع نظام حجز مواعيد بسيط لمراكز صحية تعمل بواجهة React فقط",
+    solution:
+      "تطبيق ويب React يعرّف بالمركز الصحي ويتيح حجز المواعيد عبر صفحات حديثة مع مكونات جاهزة للسلايدر والكاروسيل والتنقل",
+    impact:
+      "زيادة الحجوزات وتنظيم جدول الأطباء مع تجربة سلسة للمستخدمين على الويب",
+    technologies: [
+      "React",
+      "React Router",
+      "Bootstrap",
+      "React Bootstrap",
+      "Swiper",
+      "React Slick",
+      "Slick Carousel",
+      "React Card Slider",
+      "Font Awesome",
+    ],
+    role: "مطور واجهات أمامية - بناء التطبيق بالـ React والمكتبات المحددة",
+    features: [
+      "صفحات تعريفية للمركز والخدمات",
+      "نظام حجز مواعيد للأطباء",
+      "سلايدر للشهادات والخدمات",
+      "تصميم متجاوب باستخدام Bootstrap",
+      "تنقل حديث عبر React Router",
+    ],
+  },
 ];
 
 export function getProjectById(id: string): Project | undefined {
