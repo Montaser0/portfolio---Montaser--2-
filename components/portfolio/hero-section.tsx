@@ -23,10 +23,6 @@ export function HeroSection() {
       id="about"
       className="min-h-screen flex items-center justify-center pt-20 relative overflow-hidden"
     >
-      {/* Animated Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-cyan-500/5" />
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
       <PatternBackground className="absolute inset-0 z-0 pointer-events-none select-none" />
 
       <div className="max-w-7xl mx-auto px-6 py-20 relative z-10">
