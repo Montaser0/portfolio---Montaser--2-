@@ -19,13 +19,18 @@ function AnimatedInView({
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+    if (typeof IntersectionObserver === "undefined" || isMobile) {
+      setVisible(true);
+      return;
+    }
     const el = ref.current;
     if (!el) return;
     const io = new IntersectionObserver(
       ([e]) => {
         if (e.isIntersecting) setVisible(true);
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -38,8 +43,8 @@ function AnimatedInView({
         visible
           ? "opacity-100 translate-x-0"
           : from === "right"
-          ? "opacity-0 translate-x-100"
-          : "opacity-0 -translate-x-100",
+          ? "opacity-100 translate-x-0 md:opacity-0 md:translate-x-full"
+          : "opacity-100 translate-x-0 md:opacity-0 md:-translate-x-full",
         className
       )}
     >
