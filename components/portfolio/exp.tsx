@@ -97,6 +97,14 @@ const experiences = [
 ];
 
 export function ExperienceSection1() {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const update = () => setIsMobile(window.innerWidth < 768);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
   return (
     <section id="experience" dir="rtl" className="py-32 bg-background">
       <div className="max-w-6xl mx-auto px-6">
@@ -115,7 +123,7 @@ export function ExperienceSection1() {
           {experiences.map((exp, index) => (
             <AnimatedInOut
               key={index}
-              from={index % 2 === 0 ? "top" : "bottom"}
+              from={isMobile ? "top" : index % 2 === 0 ? "top" : "bottom"}
             >
               <div
                 className={cn(
