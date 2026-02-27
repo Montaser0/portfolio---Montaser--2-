@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Plus, ChevronDown } from "lucide-react"; // أضفنا ChevronDown
 import { cn } from "@/lib/utils";
 import { projects, type ProjectType } from "@/lib/projects-data";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -67,6 +67,8 @@ export function ProjectsSection() {
     ai: "ذكاء اصطناعي",
   };
 
+  const typeOrder: ProjectType[] = ["all", "web", "mobile", "desktop", "ai"];
+
   function classifyProjectLike(p: any): ProjectType {
     const t = (p?.type ?? "").toString().toLowerCase();
     if (t && ["web", "mobile", "desktop", "ai", "all"].includes(t)) return t as ProjectType;
@@ -83,7 +85,6 @@ export function ProjectsSection() {
     type: (p as any).type ?? classifyProjectLike(p),
   }));
 
-  const typeOrder: ProjectType[] = ["all", "web", "mobile", "desktop", "ai"];
   const typeCounts: Record<ProjectType, number> = typeOrder.reduce((acc, t) => {
     acc[t] = t === "all" ? baseProjects.length : baseProjects.filter((p) => p.type === t).length;
     return acc;
@@ -110,33 +111,62 @@ export function ProjectsSection() {
   return (
     <section id="projects" dir="rtl" className="py-32 bg-background">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-10 space-y-4 text-left">
+        {/* Header */}
+        <div className="mb-10 space-y-4 text-right">
           <h2 className="text-4xl md:text-5xl font-bold text-primary flex items-center justify-start gap-3">
             أحدث الأعمال
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl leading-relaxed text-left">
+          <p className="text-muted-foreground text-lg max-w-xl leading-relaxed text-right">
             استعراض للمشاريع التي تم تنفيذها، حيث تلتقي الدقة البرمجية بالتصميم الإبداعي.
           </p>
         </div>
 
-        <div className="mb-12">
+        {/* --- الفلترة (Navigation) --- */}
+        <div className="mb-16">
+          {/* نسخة الموبايل: قائمة منسدلة (Select) */}
+          <div className="relative block md:hidden">
+            <div className="relative">
+              <select
+                value={activeFilter}
+                onChange={(e) => setActiveFilter(e.target.value as ProjectType)}
+                className="w-full appearance-none bg-secondary/50 border border-border/50 text-foreground py-4 px-5 rounded-2xl font-bold text-lg focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              >
+                {typeOrder.map((t) => (
+                  <option key={t} value={t} className="bg-background">
+                    {TYPE_LABELS[t]} ({typeCounts[t]})
+                  </option>
+                ))}
+              </select>
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
+                <ChevronDown size={20} />
+              </div>
+            </div>
+          </div>
+
+          {/* نسخة سطح المكتب: تبويبات (Tabs) */}
           <Tabs
             value={activeFilter}
             onValueChange={(v) => setActiveFilter(v as ProjectType)}
-            className="w-full"
+            className="hidden md:block w-full"
           >
-            <TabsList className="w-full flex flex-col gap-2 h-auto p-0 md:flex-row md:flex-wrap md:gap-2 md:h-9 md:p-[3px]">
+            <TabsList className="flex w-max mx-auto h-auto p-1.5 bg-secondary/30 rounded-2xl border border-border/50 backdrop-blur-sm">
               {typeOrder.map((t) => (
                 <TabsTrigger
                   key={t}
                   value={t}
-                  className="min-w-24 w-full md:w-auto flex-none md:flex-1 data-[state=active]:border-[var(--chart-2)] active:border-[var(--chart-3)] cursor-pointer"
+                  className={cn(
+                    "relative flex items-center gap-3 px-8 py-3 rounded-xl transition-all duration-300",
+                    "data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-lg",
+                    "text-muted-foreground hover:text-foreground cursor-pointer font-bold"
+                  )}
                 >
-                  <span className="font-medium">{TYPE_LABELS[t]}</span>
+                  <span className="text-sm uppercase tracking-wide">{TYPE_LABELS[t]}</span>
                   <span
                     className={cn(
-                      "ms-2 inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs",
-                      "bg-muted text-foreground"
+                      "flex items-center justify-center min-w-[22px] h-5.5 px-1.5 text-[10px] font-black rounded-full transition-colors",
+                      activeFilter === t 
+                        ? "bg-primary text-primary-foreground" 
+                        : "bg-muted text-muted-foreground"
                     )}
                   >
                     {typeCounts[t]}
@@ -147,11 +177,10 @@ export function ProjectsSection() {
           </Tabs>
         </div>
 
-        
-
-        <div className="space-y-48">
+        {/* --- قائمة المشاريع --- */}
+        <div className="space-y-32 md:space-y-48">
           {filteredProjects.length === 0 ? (
-            <Empty className="border min-h-[200px]">
+            <Empty className="border min-h-[300px] rounded-3xl">
               <EmptyHeader>
                 <EmptyTitle>لا توجد مشاريع ضمن فئة {TYPE_LABELS[activeFilter]}</EmptyTitle>
                 <EmptyDescription>
@@ -161,70 +190,79 @@ export function ProjectsSection() {
             </Empty>
           ) : (
             filteredProjects.map((project, index) => {
-            const isEven = index % 2 === 0;
-            const imgSrc = imageOverrides[project.id] ?? project.image;
+              const isEven = index % 2 === 0;
+              const imgSrc = imageOverrides[project.id] ?? project.image;
 
-            return (
-              <AnimatedInView
-                key={project.id}
-                from={isEven ? "right" : "left"}
-                className={cn(
-                  "flex flex-col gap-16 items-center",
-                  isEven ? "md:flex-row" : "md:flex-row-reverse"
-                )}
-              >
-                <div className="relative w-full md:w-[60%] group">
-                  <div className="absolute inset-0 bg-primary/20 translate-x-4 translate-y-4 rounded-2xl -z-10 group-hover:translate-x-2 group-hover:translate-y-2 transition-all duration-500" />
-                  
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border shadow-2xl bg-secondary/30">
-                    {imgSrc ? (
-                      <Image
-                        src={imgSrc}
-                        alt={project.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        unoptimized={true}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-                        <Plus className="text-muted-foreground/20" size={60} />
-                        <span className="text-xs font-mono opacity-20 tracking-widest">لا توجد صورة</span>
-                      </div>
-                    )}
-                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full border border-primary/30 bg-background/70 backdrop-blur-md text-primary text-[11px] font-bold tracking-wide">
-                      #{project.category}
-                    </span>
-                    <Link
-                      href={`/projects/${project.id}`}
-                      className="absolute bottom-3 right-3 inline-flex items-center gap-2 text-foreground/80 hover:text-primary transition-colors cursor-pointer"
-                    >
-                      <span className="text-xs font-bold tracking-[0.2em]">عرض العمل</span>
-                      <span className="flex items-center justify-center w-9 h-9 rounded-full border border-border hover:border-primary hover:bg-primary/5 active:border-[var(--chart-2)] transition-all cursor-pointer">
-                        <ArrowLeft size={16} />
+              return (
+                <AnimatedInView
+                  key={project.id}
+                  from={isEven ? "right" : "left"}
+                  className={cn(
+                    "flex flex-col gap-10 md:gap-16 items-center",
+                    isEven ? "md:flex-row" : "md:flex-row-reverse"
+                  )}
+                >
+                  {/* صورة المشروع */}
+                  <div className="relative w-full md:w-[60%] group">
+                    <div className="absolute inset-0 bg-primary/10 translate-x-3 translate-y-3 rounded-3xl -z-10 group-hover:translate-x-1 group-hover:translate-y-1 transition-all duration-500" />
+                    
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-3xl border border-border/50 shadow-2xl bg-secondary/20">
+                      {imgSrc ? (
+                        <Image
+                          src={imgSrc}
+                          alt={project.title}
+                          fill
+                          className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                          unoptimized={true}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-muted/20">
+                          <Plus className="text-muted-foreground/10" size={80} />
+                        </div>
+                      )}
+                      
+                      {/* الوسم (Category) */}
+                      <span className="absolute top-4 right-4 px-4 py-1.5 rounded-full border border-primary/20 bg-background/80 backdrop-blur-xl text-primary text-xs font-black shadow-sm">
+                        #{project.category}
                       </span>
-                    </Link>
-                  </div>
-                </div>
 
-                <div className={cn(
-                  "w-full md:w-[40%] space-y-8",
-                  isEven ? "md:pr-12" : "md:pl-12"
-                )}>
-                  <div className="space-y-4 text-right">
-                    <h3 className="text-3xl md:text-4xl font-bold tracking-tight leading-[1.2] text-foreground">
+                      {/* رابط عرض العمل */}
+                      <Link
+                        href={`/projects/${project.id}`}
+                        className="absolute bottom-4 right-4 inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-background/90 backdrop-blur-xl border border-border hover:border-primary text-foreground transition-all group/link"
+                      >
+                        <span className="text-xs font-black">عرض العمل</span>
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* تفاصيل المشروع */}
+                  <div className={cn(
+                    "w-full md:w-[40%] space-y-6",
+                    isEven ? "md:pr-8" : "md:pl-8"
+                  )}>
+                    <h3 className="text-3xl md:text-4xl font-black text-foreground leading-tight">
                       {project.title}
                     </h3>
+                    <p className="text-muted-foreground text-lg leading-relaxed text-right font-medium">
+                      {project.problem || "تجربة رقمية متكاملة تجمع بين التصميم المبتكر والأداء القوي لتلبية احتياجات المستخدم."}
+                    </p>
+                    
+                    {/* يمكنك إضافة التقنيات هنا كـ Tags صغيرة */}
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {project.technologies?.slice(0, 3).map((tech: string) => (
+                        <span key={tech} className="text-[10px] uppercase tracking-widest font-bold opacity-50 border-b border-primary/30 pb-0.5">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <p className="text-muted-foreground text-lg leading-relaxed text-right">
-                    {project.problem || "نقوم ببناء تجربة رقمية فريدة من خلال دمج التصميم الإبداعي مع الكود النظيف والمستقر."}
-                  </p>
-                </div>
-              </AnimatedInView>
-            );
-          })
+                </AnimatedInView>
+              );
+            })
           )}
         </div>
-
       </div>
     </section>
   );
