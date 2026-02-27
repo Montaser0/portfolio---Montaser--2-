@@ -6,6 +6,8 @@ import Image from "next/image";
 import { ArrowLeft, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { projects, type ProjectType } from "@/lib/projects-data";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Empty, EmptyHeader, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
 
 function AnimatedInView({
   children,
@@ -57,6 +59,36 @@ export function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<ProjectType>("all");
   const [imageOverrides, setImageOverrides] = useState<Record<string, string>>({});
 
+  const TYPE_LABELS: Record<ProjectType, string> = {
+    all: "الكل",
+    web: "ويب",
+    mobile: "موبايل",
+    desktop: "سطح المكتب",
+    ai: "ذكاء اصطناعي",
+  };
+
+  function classifyProjectLike(p: any): ProjectType {
+    const t = (p?.type ?? "").toString().toLowerCase();
+    if (t && ["web", "mobile", "desktop", "ai", "all"].includes(t)) return t as ProjectType;
+    const cat = (p?.category ?? "").toLowerCase();
+    const tech = Array.isArray(p?.technologies) ? p.technologies.map((x: string) => x.toLowerCase()) : [];
+    if (cat.includes("موبايل") || tech.includes("flutter") || tech.includes("react native")) return "mobile";
+    if (cat.includes("ذكاء") || tech.includes("openai") || tech.includes("ai")) return "ai";
+    if (cat.includes("سطح") || tech.includes("asp.net") || tech.includes("windows")) return "desktop";
+    return "web";
+  }
+
+  const baseProjects = projects.map((p) => ({
+    ...p,
+    type: (p as any).type ?? classifyProjectLike(p),
+  }));
+
+  const typeOrder: ProjectType[] = ["all", "web", "mobile", "desktop", "ai"];
+  const typeCounts: Record<ProjectType, number> = typeOrder.reduce((acc, t) => {
+    acc[t] = t === "all" ? baseProjects.length : baseProjects.filter((p) => p.type === t).length;
+    return acc;
+  }, {} as Record<ProjectType, number>);
+
   useEffect(() => {
     const loadMappings = async () => {
       try {
@@ -72,15 +104,13 @@ export function ProjectsSection() {
 
   const filteredProjects =
     activeFilter === "all"
-      ? projects
-      : projects.filter((p) => p.type === activeFilter);
+      ? baseProjects
+      : baseProjects.filter((p) => (p.type ?? classifyProjectLike(p)) === activeFilter);
 
   return (
     <section id="projects" dir="rtl" className="py-32 bg-background">
       <div className="max-w-6xl mx-auto px-6">
-        
-        {/* Header - Styled like your reference */}
-        <div className="mb-24 space-y-4 text-left">
+        <div className="mb-10 space-y-4 text-left">
           <h2 className="text-4xl md:text-5xl font-bold text-primary flex items-center justify-start gap-3">
             أحدث الأعمال
           </h2>
@@ -89,9 +119,44 @@ export function ProjectsSection() {
           </p>
         </div>
 
-        {/* List of Projects with Alternating Layout */}
+        <div className="mb-12">
+          <Tabs
+            value={activeFilter}
+            onValueChange={(v) => setActiveFilter(v as ProjectType)}
+            className="w-full"
+          >
+            <TabsList className="w-full overflow-x-auto">
+              {typeOrder.map((t) => (
+                <TabsTrigger key={t} value={t} className="min-w-24">
+                  <span className="font-medium">{TYPE_LABELS[t]}</span>
+                  <span
+                    className={cn(
+                      "ms-2 inline-flex items-center justify-center rounded-full px-2 py-0.5 text-xs",
+                      "bg-muted text-foreground"
+                    )}
+                  >
+                    {typeCounts[t]}
+                  </span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </div>
+
+        
+
         <div className="space-y-48">
-          {filteredProjects.map((project, index) => {
+          {filteredProjects.length === 0 ? (
+            <Empty className="border min-h-[200px]">
+              <EmptyHeader>
+                <EmptyTitle>لا توجد مشاريع ضمن فئة {TYPE_LABELS[activeFilter]}</EmptyTitle>
+                <EmptyDescription>
+                  أضف مشروعًا جديدًا أو اختر فئة أخرى لعرض النتائج.
+                </EmptyDescription>
+              </EmptyHeader>
+            </Empty>
+          ) : (
+            filteredProjects.map((project, index) => {
             const isEven = index % 2 === 0;
             const imgSrc = imageOverrides[project.id] ?? project.image;
 
@@ -104,19 +169,17 @@ export function ProjectsSection() {
                   isEven ? "md:flex-row" : "md:flex-row-reverse"
                 )}
               >
-                {/* Image Section - This is where your photos go */}
                 <div className="relative w-full md:w-[60%] group">
-                  {/* Background decorative box */}
                   <div className="absolute inset-0 bg-primary/20 translate-x-4 translate-y-4 rounded-2xl -z-10 group-hover:translate-x-2 group-hover:translate-y-2 transition-all duration-500" />
                   
                   <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border shadow-2xl bg-secondary/30">
                     {imgSrc ? (
                       <Image
-                        src={imgSrc} // سيأخذ الصورة من بياناتك أو الرابط المرفوع
+                        src={imgSrc}
                         alt={project.title}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        unoptimized={true} // لضمان ظهور الصور الخارجية دون مشاكل في التحسين
+                        unoptimized={true}
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-4">
@@ -124,11 +187,9 @@ export function ProjectsSection() {
                         <span className="text-xs font-mono opacity-20 tracking-widest">لا توجد صورة</span>
                       </div>
                     )}
-                    {/* شارة الفئة */}
                     <span className="absolute top-3 right-3 px-3 py-1 rounded-full border border-primary/30 bg-background/70 backdrop-blur-md text-primary text-[11px] font-bold tracking-wide">
                       #{project.category}
                     </span>
-                    {/* زر عرض العمل داخل الصورة */}
                     <Link
                       href={`/projects/${project.id}`}
                       className="absolute bottom-3 right-3 inline-flex items-center gap-2 text-foreground/80 hover:text-primary transition-colors"
@@ -141,7 +202,6 @@ export function ProjectsSection() {
                   </div>
                 </div>
 
-                {/* Text Content Section */}
                 <div className={cn(
                   "w-full md:w-[40%] space-y-8",
                   isEven ? "md:pr-12" : "md:pl-12"
@@ -157,11 +217,10 @@ export function ProjectsSection() {
                 </div>
               </AnimatedInView>
             );
-          })}
+          })
+          )}
         </div>
 
-        {/* Footer Design - #Lab; */}
-     
       </div>
     </section>
   );
