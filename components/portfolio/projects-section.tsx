@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Plus, ChevronDown } from "lucide-react"; // أضفنا ChevronDown
+import { ArrowLeft, Plus, ChevronDown, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { projects, type ProjectType } from "@/lib/projects-data";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,6 +20,7 @@ function AnimatedInView({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+
   useEffect(() => {
     const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
     if (typeof IntersectionObserver === "undefined" || isMobile) {
@@ -37,6 +38,7 @@ function AnimatedInView({
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
   return (
     <div
       ref={ref}
@@ -60,11 +62,11 @@ export function ProjectsSection() {
   const [imageOverrides, setImageOverrides] = useState<Record<string, string>>({});
 
   const TYPE_LABELS: Record<ProjectType, string> = {
-    all: "الكل",
-    web: "ويب",
-    mobile: "موبايل",
-    desktop: "سطح المكتب",
-    ai: "ذكاء اصطناعي",
+    all: "جميع المشاريع",
+    web: "تطبيقات الويب",
+    mobile: "تطبيقات الموبايل",
+    desktop: "برامج سطح المكتب",
+    ai: "الذكاء الاصطناعي",
   };
 
   const typeOrder: ProjectType[] = ["all", "web", "mobile", "desktop", "ai"];
@@ -109,63 +111,75 @@ export function ProjectsSection() {
       : baseProjects.filter((p) => (p.type ?? classifyProjectLike(p)) === activeFilter);
 
   return (
-    <section id="projects" dir="rtl" className="py-32 bg-background">
+    <section id="projects" dir="rtl" className="py-24 md:py-32 bg-background relative overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
-        {/* Header */}
-        <div className="mb-10 space-y-4 text-right">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary flex items-center justify-start gap-3">
-            أحدث الأعمال
+        
+        {/* Header Section */}
+        <div className="mb-12 md:mb-16 space-y-4 text-right">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-2">
+            <LayoutGrid size={14} />
+            <span>معرض الأعمال</span>
+          </div>
+          <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight leading-tight">
+            أحدث <span className="text-primary">الإبداعات</span>
           </h2>
-          <p className="text-muted-foreground text-lg max-w-xl leading-relaxed text-right">
-            استعراض للمشاريع التي تم تنفيذها، حيث تلتقي الدقة البرمجية بالتصميم الإبداعي.
+          <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed font-medium">
+            مجموعة مختارة من المشاريع التي تعكس شغفنا بالابتكار ودقتنا في التنفيذ البرمجي.
           </p>
         </div>
 
-        {/* --- الفلترة (Navigation) --- */}
-        <div className="mb-16">
-          {/* نسخة الموبايل: قائمة منسدلة (Select) */}
-          <div className="relative block md:hidden">
-            <div className="relative">
+        {/* --- Navigation & Filtering --- */}
+        <div className="mb-20">
+          
+          {/* Mobile: Premium Custom Select */}
+          <div className="relative block md:hidden w-full group">
+            <label className="block text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-3 mr-1 opacity-80">
+              تصفية حسب الفئة
+            </label>
+            <div className="relative rounded-2xl border border-border/60 bg-secondary/20 backdrop-blur-xl transition-all duration-300 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/5">
               <select
                 value={activeFilter}
                 onChange={(e) => setActiveFilter(e.target.value as ProjectType)}
-                className="w-full appearance-none bg-secondary/50 border border-border/50 text-foreground py-4 px-5 rounded-2xl font-bold text-lg focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                className="w-full appearance-none bg-transparent text-foreground py-5 pr-5 pl-14 font-bold text-base cursor-pointer outline-none relative z-10"
               >
                 {typeOrder.map((t) => (
-                  <option key={t} value={t} className="bg-background">
+                  <option key={t} value={t} className="bg-background text-foreground">
                     {TYPE_LABELS[t]} ({typeCounts[t]})
                   </option>
                 ))}
               </select>
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
-                <ChevronDown size={20} />
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10 text-primary transition-transform group-focus-within:rotate-180">
+                  <ChevronDown size={20} strokeWidth={2.5} />
+                </div>
               </div>
+              <div className="absolute right-0 top-3 bottom-3 w-1 bg-primary rounded-l-full shadow-[0_0_12px_rgba(var(--primary),0.4)]" />
             </div>
           </div>
 
-          {/* نسخة سطح المكتب: تبويبات (Tabs) */}
+          {/* Desktop: Modern Tabs */}
           <Tabs
             value={activeFilter}
             onValueChange={(v) => setActiveFilter(v as ProjectType)}
             className="hidden md:block w-full"
           >
-            <TabsList className="flex w-max mx-auto h-auto p-1.5 bg-secondary/30 rounded-2xl border border-border/50 backdrop-blur-sm">
+            <TabsList className="flex w-max mx-auto h-auto p-1.5 bg-secondary/30 rounded-[2rem] border border-border/40 backdrop-blur-md">
               {typeOrder.map((t) => (
                 <TabsTrigger
                   key={t}
                   value={t}
                   className={cn(
-                    "relative flex items-center gap-3 px-8 py-3 rounded-xl transition-all duration-300",
-                    "data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-lg",
-                    "text-muted-foreground hover:text-foreground cursor-pointer font-bold"
+                    "relative flex items-center gap-3 px-8 py-3.5 rounded-[1.5rem] transition-all duration-500",
+                    "data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xl data-[state=active]:scale-[1.02]",
+                    "text-muted-foreground hover:text-foreground cursor-pointer font-bold text-sm"
                   )}
                 >
-                  <span className="text-sm uppercase tracking-wide">{TYPE_LABELS[t]}</span>
+                  <span>{TYPE_LABELS[t]}</span>
                   <span
                     className={cn(
-                      "flex items-center justify-center min-w-[22px] h-5.5 px-1.5 text-[10px] font-black rounded-full transition-colors",
+                      "flex items-center justify-center min-w-[24px] h-6 px-1.5 text-[11px] font-black rounded-full transition-all",
                       activeFilter === t 
-                        ? "bg-primary text-primary-foreground" 
+                        ? "bg-primary text-primary-foreground scale-110 shadow-lg shadow-primary/20" 
                         : "bg-muted text-muted-foreground"
                     )}
                   >
@@ -177,14 +191,14 @@ export function ProjectsSection() {
           </Tabs>
         </div>
 
-        {/* --- قائمة المشاريع --- */}
+        {/* --- Projects Grid/List --- */}
         <div className="space-y-32 md:space-y-48">
           {filteredProjects.length === 0 ? (
-            <Empty className="border min-h-[300px] rounded-3xl">
+            <Empty className="border-2 border-dashed border-border/40 min-h-[350px] rounded-[3rem] bg-secondary/5">
               <EmptyHeader>
-                <EmptyTitle>لا توجد مشاريع ضمن فئة {TYPE_LABELS[activeFilter]}</EmptyTitle>
-                <EmptyDescription>
-                  أضف مشروعًا جديدًا أو اختر فئة أخرى لعرض النتائج.
+                <EmptyTitle className="text-2xl font-black">نأسف، لا توجد نتائج</EmptyTitle>
+                <EmptyDescription className="text-base font-medium">
+                  لم يتم العثور على مشاريع في فئة {TYPE_LABELS[activeFilter]} حالياً.
                 </EmptyDescription>
               </EmptyHeader>
             </Empty>
@@ -198,61 +212,68 @@ export function ProjectsSection() {
                   key={project.id}
                   from={isEven ? "right" : "left"}
                   className={cn(
-                    "flex flex-col gap-10 md:gap-16 items-center",
+                    "flex flex-col gap-12 md:gap-20 items-center",
                     isEven ? "md:flex-row" : "md:flex-row-reverse"
                   )}
                 >
-                  {/* صورة المشروع */}
-                  <div className="relative w-full md:w-[60%] group">
-                    <div className="absolute inset-0 bg-primary/10 translate-x-3 translate-y-3 rounded-3xl -z-10 group-hover:translate-x-1 group-hover:translate-y-1 transition-all duration-500" />
+                  {/* Image Container */}
+                  <div className="relative w-full md:w-[58%] group">
+                    <div className="absolute inset-0 bg-primary/5 -rotate-2 rounded-[2.5rem] -z-10 group-hover:rotate-0 transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-primary/10 translate-x-4 translate-y-4 rounded-[2.5rem] -z-20 opacity-50" />
                     
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-3xl border border-border/50 shadow-2xl bg-secondary/20">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2.5rem] border border-border/50 shadow-[0_20px_50px_rgba(0,0,0,0.1)] bg-secondary/20">
                       {imgSrc ? (
                         <Image
                           src={imgSrc}
                           alt={project.title}
                           fill
-                          className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                          className="object-cover transition-all duration-1000 group-hover:scale-105 group-hover:rotate-1"
                           unoptimized={true}
                         />
                       ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-muted/20">
-                          <Plus className="text-muted-foreground/10" size={80} />
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-muted/10">
+                          <Plus className="text-muted-foreground/20" size={100} strokeWidth={1} />
                         </div>
                       )}
                       
-                      {/* الوسم (Category) */}
-                      <span className="absolute top-4 right-4 px-4 py-1.5 rounded-full border border-primary/20 bg-background/80 backdrop-blur-xl text-primary text-xs font-black shadow-sm">
-                        #{project.category}
-                      </span>
+                      {/* Label Overlay */}
+                      <div className="absolute top-6 right-6">
+                        <span className="px-5 py-2 rounded-2xl bg-background/60 backdrop-blur-2xl border border-white/10 text-primary text-[10px] font-black uppercase tracking-widest shadow-xl">
+                          {project.category}
+                        </span>
+                      </div>
 
-                      {/* رابط عرض العمل */}
+                      {/* Floating Action Button */}
                       <Link
                         href={`/projects/${project.id}`}
-                        className="absolute bottom-4 right-4 inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-background/90 backdrop-blur-xl border border-border hover:border-primary text-foreground transition-all group/link"
+                        className="absolute bottom-6 left-6 md:left-auto md:right-6 flex items-center gap-3 px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-black text-xs shadow-2xl shadow-primary/30 hover:bg-primary/90 hover:-translate-y-1 transition-all active:scale-95 group/btn"
                       >
-                        <span className="text-xs font-black">عرض العمل</span>
+                        عرض التفاصيل
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                       </Link>
                     </div>
                   </div>
 
-                  {/* تفاصيل المشروع */}
+                  {/* Content Container */}
                   <div className={cn(
-                    "w-full md:w-[40%] space-y-6",
-                    isEven ? "md:pr-8" : "md:pl-8"
+                    "w-full md:w-[42%] space-y-8",
+                    isEven ? "md:pr-12" : "md:pl-12 text-right md:text-left"
                   )}>
-                    <h3 className="text-3xl md:text-4xl font-black text-foreground leading-tight">
-                      {project.title}
-                    </h3>
-                    <p className="text-muted-foreground text-lg leading-relaxed text-right font-medium">
-                      {project.problem || "تجربة رقمية متكاملة تجمع بين التصميم المبتكر والأداء القوي لتلبية احتياجات المستخدم."}
-                    </p>
+                    <div className="space-y-4">
+                       <h3 className="text-3xl md:text-5xl font-black text-foreground leading-[1.1] tracking-tight">
+                        {project.title}
+                      </h3>
+                      <div className="h-1.5 w-20 bg-primary/20 rounded-full" />
+                    </div>
                     
-                    {/* يمكنك إضافة التقنيات هنا كـ Tags صغيرة */}
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {project.technologies?.slice(0, 3).map((tech: string) => (
-                        <span key={tech} className="text-[10px] uppercase tracking-widest font-bold opacity-50 border-b border-primary/30 pb-0.5">
+                    <p className="text-muted-foreground text-lg md:text-xl leading-relaxed font-medium">
+                      {project.problem || "حل برمجي متكامل يهدف إلى تبسيط تجربة المستخدم ورفع كفاءة الأداء في البيئات الرقمية المعقدة."}
+                    </p>
+
+                    {/* Tech Stack Mini Tags */}
+                    <div className="flex flex-wrap gap-3 pt-4">
+                      {project.technologies?.slice(0, 4).map((tech: string) => (
+                        <span key={tech} className="px-3 py-1 rounded-lg bg-secondary/50 border border-border/50 text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
                           {tech}
                         </span>
                       ))}
@@ -263,6 +284,7 @@ export function ProjectsSection() {
             })
           )}
         </div>
+
       </div>
     </section>
   );
