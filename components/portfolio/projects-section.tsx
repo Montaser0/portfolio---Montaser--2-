@@ -125,9 +125,13 @@ export function ProjectsSection() {
             onValueChange={(v) => setActiveFilter(v as ProjectType)}
             className="w-full"
           >
-            <TabsList className="w-full overflow-x-auto">
+            <TabsList className="w-full flex flex-col gap-2 h-auto p-0 md:flex-row md:flex-wrap md:gap-2 md:h-9 md:p-[3px]">
               {typeOrder.map((t) => (
-                <TabsTrigger key={t} value={t} className="min-w-24">
+                <TabsTrigger
+                  key={t}
+                  value={t}
+                  className="min-w-24 w-full md:w-auto flex-none md:flex-1 data-[state=active]:border-[var(--chart-2)] active:border-[var(--chart-3)] cursor-pointer"
+                >
                   <span className="font-medium">{TYPE_LABELS[t]}</span>
                   <span
                     className={cn(
@@ -192,10 +196,10 @@ export function ProjectsSection() {
                     </span>
                     <Link
                       href={`/projects/${project.id}`}
-                      className="absolute bottom-3 right-3 inline-flex items-center gap-2 text-foreground/80 hover:text-primary transition-colors"
+                      className="absolute bottom-3 right-3 inline-flex items-center gap-2 text-foreground/80 hover:text-primary transition-colors cursor-pointer"
                     >
                       <span className="text-xs font-bold tracking-[0.2em]">عرض العمل</span>
-                      <span className="flex items-center justify-center w-9 h-9 rounded-full border border-border hover:border-primary hover:bg-primary/5 transition-all">
+                      <span className="flex items-center justify-center w-9 h-9 rounded-full border border-border hover:border-primary hover:bg-primary/5 active:border-[var(--chart-2)] transition-all cursor-pointer">
                         <ArrowLeft size={16} />
                       </span>
                     </Link>
