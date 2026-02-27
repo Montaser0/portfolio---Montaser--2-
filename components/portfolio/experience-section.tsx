@@ -23,22 +23,40 @@ function AnimatedInOut({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const update = () => setIsMobile(window.innerWidth < 768);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (isMobile) {
+      setVisible(true);
+      return;
+    }
     const io = new IntersectionObserver(
       ([entry]) => setVisible(entry.isIntersecting),
       { threshold: 0.2 }
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [isMobile]);
   return (
     <div
       ref={ref}
       className={[
         "transition-all duration-700 ease-out will-change-transform",
-        visible ? "opacity-100 translate-y-0" : from === "top" ? "-translate-y-80 opacity-0" : "translate-y-80 opacity-0",
+        isMobile
+          ? "opacity-100 translate-y-0"
+          : visible
+          ? "opacity-100 translate-y-0"
+          : from === "top"
+          ? "-translate-y-80 opacity-0"
+          : "translate-y-80 opacity-0",
         className ?? "",
       ].join(" ")}
     >
