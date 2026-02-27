@@ -59,7 +59,6 @@ function AnimatedInView({
 
 export function ProjectsSection() {
   const [activeFilter, setActiveFilter] = useState<ProjectType>("all");
-  const [imageOverrides, setImageOverrides] = useState<Record<string, string>>({});
 
   const TYPE_LABELS: Record<ProjectType, string> = {
     all: "جميع المشاريع",
@@ -92,18 +91,6 @@ export function ProjectsSection() {
     return acc;
   }, {} as Record<ProjectType, number>);
 
-  useEffect(() => {
-    const loadMappings = async () => {
-      try {
-        const res = await fetch("/api/project-images", { cache: "no-store" });
-        if (res.ok) {
-          const data = await res.json();
-          setImageOverrides(data || {});
-        }
-      } catch {}
-    };
-    loadMappings();
-  }, []);
 
   const filteredProjects =
     activeFilter === "all"
@@ -131,7 +118,7 @@ export function ProjectsSection() {
         {/* --- Navigation & Filtering --- */}
         <div className="mb-20">
           
-          {/* Mobile: Premium Custom Select */}
+          {/* Mobile: Custom Select */}
           <div className="relative block md:hidden w-full group">
             <label className="block text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-3 mr-1 opacity-80">
               تصفية حسب الفئة
@@ -157,7 +144,7 @@ export function ProjectsSection() {
             </div>
           </div>
 
-          {/* Desktop: Modern Tabs */}
+          {/* Desktop: Tabs */}
           <Tabs
             value={activeFilter}
             onValueChange={(v) => setActiveFilter(v as ProjectType)}
@@ -191,7 +178,7 @@ export function ProjectsSection() {
           </Tabs>
         </div>
 
-        {/* --- Projects Grid/List --- */}
+        {/* --- Projects Grid --- */}
         <div className="space-y-32 md:space-y-48">
           {filteredProjects.length === 0 ? (
             <Empty className="border-2 border-dashed border-border/40 min-h-[350px] rounded-[3rem] bg-secondary/5">
@@ -205,7 +192,8 @@ export function ProjectsSection() {
           ) : (
             filteredProjects.map((project, index) => {
               const isEven = index % 2 === 0;
-              const imgSrc = imageOverrides[project.id] ?? project.image;
+              const rawSrc = project.image || `/projects/${project.id}.png`;
+              const imgSrc = encodeURI(rawSrc);
 
               return (
                 <AnimatedInView
@@ -219,34 +207,32 @@ export function ProjectsSection() {
                   {/* Image Container */}
                   <div className="relative w-full md:w-[58%] group">
                     <div className="absolute inset-0 bg-primary/5 -rotate-2 rounded-[2.5rem] -z-10 group-hover:rotate-0 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-primary/10 translate-x-4 translate-y-4 rounded-[2.5rem] -z-20 opacity-50" />
                     
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2.5rem] border border-border/50 shadow-[0_20px_50px_rgba(0,0,0,0.1)] bg-secondary/20">
+                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2.5rem] border border-border/50 shadow-2xl bg-secondary/20">
                       {imgSrc ? (
                         <Image
                           src={imgSrc}
                           alt={project.title}
                           fill
-                          className="object-cover transition-all duration-1000 group-hover:scale-105 group-hover:rotate-1"
-                          unoptimized={true}
+                          className="object-cover transition-all duration-1000 group-hover:scale-105"
+                          unoptimized // اضف هذا إذا كانت الصور من رابط خارجي لتجاوز حظر التحسين المؤقت
+                          priority={index < 2}
                         />
                       ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-muted/10">
-                          <Plus className="text-muted-foreground/20" size={100} strokeWidth={1} />
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-muted/10">
+                          <Plus className="text-muted-foreground/20" size={80} />
                         </div>
                       )}
                       
-                      {/* Label Overlay */}
                       <div className="absolute top-6 right-6">
-                        <span className="px-5 py-2 rounded-2xl bg-background/60 backdrop-blur-2xl border border-white/10 text-primary text-[10px] font-black uppercase tracking-widest shadow-xl">
+                        <span className="px-5 py-2 rounded-2xl bg-background/60 backdrop-blur-2xl border border-white/10 text-primary text-[10px] font-black uppercase tracking-widest">
                           {project.category}
                         </span>
                       </div>
 
-                      {/* Floating Action Button */}
                       <Link
                         href={`/projects/${project.id}`}
-                        className="absolute bottom-6 left-6 md:left-auto md:right-6 flex items-center gap-3 px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-black text-xs shadow-2xl shadow-primary/30 hover:bg-primary/90 hover:-translate-y-1 transition-all active:scale-95 group/btn"
+                        className="absolute bottom-6 left-6 md:right-6 md:left-auto flex items-center gap-3 px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-black text-xs shadow-2xl hover:-translate-y-1 transition-all group/btn"
                       >
                         عرض التفاصيل
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
@@ -260,20 +246,19 @@ export function ProjectsSection() {
                     isEven ? "md:pr-12" : "md:pl-12 text-right md:text-left"
                   )}>
                     <div className="space-y-4">
-                       <h3 className="text-3xl md:text-5xl font-black text-foreground leading-[1.1] tracking-tight">
+                       <h3 className="text-3xl md:text-5xl font-black text-foreground leading-[1.1]">
                         {project.title}
                       </h3>
                       <div className="h-1.5 w-20 bg-primary/20 rounded-full" />
                     </div>
                     
                     <p className="text-muted-foreground text-lg md:text-xl leading-relaxed font-medium">
-                      {project.problem || "حل برمجي متكامل يهدف إلى تبسيط تجربة المستخدم ورفع كفاءة الأداء في البيئات الرقمية المعقدة."}
+                      {project.problem || "تجربة رقمية متكاملة تجمع بين التصميم المبتكر والأداء القوي."}
                     </p>
 
-                    {/* Tech Stack Mini Tags */}
                     <div className="flex flex-wrap gap-3 pt-4">
                       {project.technologies?.slice(0, 4).map((tech: string) => (
-                        <span key={tech} className="px-3 py-1 rounded-lg bg-secondary/50 border border-border/50 text-[10px] font-bold text-muted-foreground uppercase tracking-tighter">
+                        <span key={tech} className="px-3 py-1 rounded-lg bg-secondary/50 border border-border/50 text-[10px] font-bold text-muted-foreground uppercase">
                           {tech}
                         </span>
                       ))}
@@ -284,7 +269,6 @@ export function ProjectsSection() {
             })
           )}
         </div>
-
       </div>
     </section>
   );

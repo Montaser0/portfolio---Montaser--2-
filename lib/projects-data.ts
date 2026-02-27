@@ -36,6 +36,7 @@ export const projects: Project[] = [
     category: "تجارة إلكترونية",
     type: "web",
     icon: ShoppingBag,
+    image: "/projects/poultry-eggs-store.png",
     problem:
       "الحاجة إلى منصة بيع إلكترونية لمنتجات البيض تُخدم العملاء وتدير الطلبات بكفاءة",
     solution:
@@ -57,6 +58,7 @@ export const projects: Project[] = [
     category: "تطبيقات ويب",
     type: "web",
     icon: Globe,
+    image: "/projects/coach-dashboard.png",
     problem:
       "الحاجة لنظام إدارة مركزي للتحكم في تطبيق تعليمي مع صلاحيات متعددة",
     solution:
@@ -78,6 +80,7 @@ export const projects: Project[] = [
     category: "تطبيقات موبايل",
     type: "mobile",
     icon: Smartphone,
+    image: "/projects/coach-app.png",
     problem: "الحاجة لتطبيق تعليمي متكامل يوفر تجربة تعلم سلسة للطلاب",
     solution:
       "تطبيق موبايل تفاعلي يتيح للطلاب الوصول للمحتوى التعليمي والتفاعل مع المعلمين",
@@ -98,6 +101,7 @@ export const projects: Project[] = [
     category: "ذكاء اصطناعي",
     type: "ai",
     icon: Bot,
+    image: "/projects/ai-chatbot.png",
     problem: "الحاجة لأتمتة الردود والتفاعل مع العملاء على مدار الساعة",
     solution:
       "شاتبوت ذكي مبني على n8n وOpenAI قادر على فهم الاستفسارات والرد عليها بذكاء",
@@ -118,6 +122,7 @@ export const projects: Project[] = [
     category: "تطبيق سطح مكتب",
     type: "desktop",
     icon: Shield,
+    image: "/projects/encryption-system.png",
     problem: "الحاجة لحماية البيانات الحساسة والرسائل من الوصول غير المصرح",
     solution:
       "تطبيق سطح مكتب متقدم يدعم تشفير النصوص والملفات وفك تشفيرهم باستخدام خوارزمية AES",
@@ -138,6 +143,7 @@ export const projects: Project[] = [
     category: "أنظمة إدارة",
     type: "web",
     icon: Database,
+    image: "/projects/poultry-management.png",
     problem: "صعوبة تتبع الإنتاج والمبيعات والمحاسبة في مداجن البيض",
     solution: "نظام متكامل لإدارة المخزون والإنتاج والمحاسبة مع تقارير شاملة",
     impact: "تحسين الكفاءة التشغيلية ودقة البيانات المالية",
@@ -157,6 +163,7 @@ export const projects: Project[] = [
     category: "أنظمة إدارة",
     type: "web",
     icon: School,
+    image: "/projects/school-management.png",
     problem: "الحاجة لنظام شامل لإدارة شؤون المدرسة والطلاب والمعلمين",
     solution:
       "منصة متكاملة لإدارة الطلاب والمعلمين والفصول والدرجات والحضور",
@@ -177,6 +184,7 @@ export const projects: Project[] = [
     category: "تجارة إلكترونية",
     type: "web",
     icon: ShoppingBag,
+    image: "/projects/digital-store.png",
     problem: "الحاجة لمنصة بيع منتجات رقمية مع نظام دفع وتسليم آلي",
     solution:
       "متجر إلكتروني متكامل مع سلة مشتريات ونظام دفع وتحميل تلقائي للمنتجات",
@@ -197,6 +205,7 @@ export const projects: Project[] = [
     category: "أنظمة إدارة",
     type: "web",
     icon: Package,
+    image: "/projects/inventory-dashboard.png",
     problem: "صعوبة تتبع المخزون والمبيعات واتخاذ قرارات مبنية على البيانات",
     solution: "داشبورد تفاعلي لمتابعة المخزون والمبيعات مع تحليلات وتقارير",
     impact: "تحسين إدارة المخزون وزيادة الربحية",
@@ -216,6 +225,7 @@ export const projects: Project[] = [
     category: "تطبيقات موبايل",
     type: "mobile",
     icon: Calendar,
+    image: "/projects/health-booking.png",
     problem: "صعوبة إدارة مواعيد المرضى وتنظيم جدول الأطباء",
     solution: "تطبيق موبايل يتيح للمرضى حجز المواعيد ومتابعتها بسهولة",
     impact: "تحسين تجربة المرضى وتنظيم عمل المركز الصحي",
@@ -235,6 +245,7 @@ export const projects: Project[] = [
     category: "تطبيقات ويب",
     type: "web",
     icon: Calendar,
+    image: "/projects/meditro.png",
     problem:
       "الحاجة لواجهة ويب تعريفية مع نظام حجز مواعيد بسيط لمراكز صحية تعمل بواجهة React فقط",
     solution:

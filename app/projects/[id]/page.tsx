@@ -55,14 +55,8 @@ export default async function ProjectPage({
   }
 
   const ProjectIcon = project.icon;
-  let overrides: Record<string, string> = {};
-  try {
-    const res = await fetch("/api/project-images", { cache: "no-store" });
-    if (res.ok) {
-      overrides = (await res.json()) ?? {};
-    }
-  } catch {}
-  const imgSrc = overrides[project.id] ?? project.image ?? "/placeholder-project.jpg";
+  const rawSrc = (project.image || `/projects/${project.id}.png` || "/placeholder-project.jpg") as string;
+  const imgSrc = encodeURI(rawSrc);
 
   return (
     <main className="min-h-screen bg-background pb-20" dir="rtl">
@@ -89,17 +83,17 @@ export default async function ProjectPage({
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <div className="flex items-center gap-3">
-                <div className={cn(
+                {/* <div className={cn(
                   "p-3 rounded-xl ring-1 ring-border shadow-sm",
                   project.type === "web" && "bg-blue-500/10 text-blue-500",
                   project.type === "mobile" && "bg-green-500/10 text-green-500",
                   project.type === "ai" && "bg-amber-500/10 text-amber-500"
                 )}>
                   <ProjectIcon size={24} />
-                </div>
-                <span className="text-sm font-black tracking-widest text-primary uppercase opacity-70">
+                </div> */}
+                {/* <span className="text-sm font-black tracking-widest text-primary uppercase opacity-70">
                   {project.category}
-                </span>
+                </span> */}
               </div>
               
               <h1 className="text-4xl md:text-6xl font-black text-foreground leading-[1.1]">
@@ -110,17 +104,7 @@ export default async function ProjectPage({
                 {project.solution}
               </p>
 
-              <div className="flex flex-wrap gap-4 pt-4">
-                {/* روابط المشروع إذا وجدت في البيانات */}
-                <Button className="rounded-full px-8 h-12 gap-2 shadow-xl shadow-primary/20 font-bold">
-                  <ExternalLink size={18} />
-                  معاينة المشروع
-                </Button>
-                <Button variant="outline" className="rounded-full px-8 h-12 gap-2 font-bold border-border/60">
-                  <Github size={18} />
-                  الكود المصدري
-                </Button>
-              </div>
+
             </div>
 
             {/* صورة المشروع بشكل Mockup */}
@@ -150,7 +134,6 @@ export default async function ProjectPage({
             <Card key={i} className="border-none bg-secondary/20 backdrop-blur-sm hover:bg-secondary/30 transition-colors rounded-3xl overflow-hidden">
               <CardContent className="p-8">
                 <div className={cn("inline-flex p-3 rounded-2xl mb-6", item.bg)}>
-                  <item.icon className={item.color} size={24} />
                 </div>
                 <h3 className="text-xl font-black mb-4">{item.title}</h3>
                 <p className="text-muted-foreground leading-relaxed font-medium">
