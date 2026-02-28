@@ -1,13 +1,36 @@
 "use client";
 
-import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const socialLinks = [
-  { icon: Github, href: "#", label: "GitHub" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Mail, href: "#contact", label: "Email" },
+  {
+    isFa: true,
+    iconClass: "fa-brands fa-whatsapp",
+    href: "https://wa.me/905316924944",
+    label: "WhatsApp",
+    target: "_blank",
+    rel: "noopener noreferrer",
+    title: "WhatsApp",
+  },
+  {
+    isFa: true,
+    iconClass: "fa-brands fa-instagram",
+    href: "https://www.instagram.com/montaser_haj_omar8?igsh=anBndDNoMmhnN2Fz",
+    label: "Instagram",
+  },
+  {
+    isFa: true,
+    iconClass: "fa-brands fa-facebook",
+    href: "https://www.facebook.com/share/18GKrh5v9R/",
+    label: "Facebook",
+  },
+  {
+    isFa: true,
+    iconClass: "fa-brands fa-linkedin",
+    href:
+      "https://www.linkedin.com/in/montaser-haj-omar-b91841281?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    label: "LinkedIn",
+  },
 ];
 
 export function Footer() {
@@ -24,18 +47,19 @@ export function Footer() {
  
         <div className="mt-10 grid gap-10 md:grid-cols-2">
           <div className="flex flex-col items-center md:items-start gap-4">
-            <p className="text-base md:text-lg font-semibold text-primary">
-              تابعني عبر وسائل التواصل!
-            </p>
+            <p className="text-base md:text-lg font-semibold text-primary">تابعني عبر وسائل التواصل!</p>
             <div className="flex items-center gap-3">
               {socialLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
                   aria-label={link.label}
-                  className="h-12 w-12 rounded-full border border-border bg-background text-muted-foreground flex items-center justify-center hover:text-primary hover:border-primary/40 shadow-sm hover:shadow transition-all"
+                  title={link.title}
+                  target={(link as any).target}
+                  rel={(link as any).rel}
+                  className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
                 >
-                  <link.icon className="h-5 w-5" />
+                  <i className={`${(link as any).iconClass} text-2xl`} aria-hidden="true" />
                 </a>
               ))}
             </div>

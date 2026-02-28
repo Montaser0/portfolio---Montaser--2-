@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown, Linkedin, Instagram, Facebook, MessageCircle } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import PatternBackground from "@/components/portfolio/pattern-background";
@@ -74,28 +74,28 @@ export function HeroSection() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <MessageCircle className="h-6 w-6" />
+                <i className="fa-brands fa-whatsapp text-2xl" aria-hidden="true" />
               </a>
               <a
                 href="https://www.instagram.com/montaser_haj_omar8?igsh=anBndDNoMmhnN2Fz"
                 className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
                 aria-label="Instagram"
               >
-                <Instagram className="h-6 w-6" />
+                <i className="fa-brands fa-instagram text-2xl" aria-hidden="true" />
               </a>
               <a
                 href="https://www.facebook.com/share/18GKrh5v9R/"
                 className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
                 aria-label="Facebook"
               >
-                <Facebook className="h-6 w-6" />
+                <i className="fa-brands fa-facebook text-2xl" aria-hidden="true" />
               </a>
               <a
                 href="https://www.linkedin.com/in/montaser-haj-omar-b91841281?utm_source=share_via&utm_content=profile&utm_medium=member_android"
                 className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="h-6 w-6" />
+                <i className="fa-brands fa-linkedin text-2xl" aria-hidden="true" />
               </a>
             </div>
           </div>
