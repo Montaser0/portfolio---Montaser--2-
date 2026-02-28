@@ -58,10 +58,10 @@ export function HeroSection() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-primary/50 text-foreground hover:bg-primary/10 bg-transparent transition-all"
+                className="border-primary/50 text-foreground  bg-transparent transition-all"
                 asChild
               >
-                <a href="#contact">تواصل معي</a>
+                <a href="https://wa.me/905316924944" target="_blank" rel="noopener noreferrer">تواصل معي</a>
               </Button>
             </div>
 
