@@ -155,8 +155,8 @@ export function ExperienceSection() {
           <div className="relative max-w-4xl mx-auto px-6">
           {/* علامة اقتباس خلفية ضخمة لتعزيز التصميم */}
           <Quote
-            className="absolute -top-12 -right-4 size-32 text-primary opacity-[0.03] rotate-12 -z-10"
-            strokeWidth={1}
+            className="absolute -top-12 -right-4 size-36 md:size-40 text-primary/25 drop-shadow-md opacity-100 rotate-12 -z-10 pointer-events-none select-none"
+            strokeWidth={1.5}
           />
 
           <div className="relative border-r-2 border-primary/30 pr-8 py-4">
@@ -178,8 +178,8 @@ export function ExperienceSection() {
 
           {/* علامة اقتباس سفلية لإتمام التوازن البصري */}
           <Quote
-            className="absolute -bottom-12 -left-4 size-24 text-primary opacity-[0.03] -rotate-12 -z-10"
-            strokeWidth={1}
+            className="absolute -bottom-12 -left-4 size-28 md:size-32 text-primary/20 drop-shadow-md opacity-100 -rotate-12 -z-10 pointer-events-none select-none"
+            strokeWidth={1.5}
           />
           </div>
         </AnimatedInOut>
