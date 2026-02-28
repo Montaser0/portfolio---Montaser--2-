@@ -48,7 +48,7 @@ export function Footer() {
         <div className="mt-10 grid gap-10 md:grid-cols-2">
           <div className="flex flex-col items-center md:items-start gap-4">
             <p className="text-base md:text-lg font-semibold text-primary">تابعني عبر وسائل التواصل!</p>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4 md:gap-5">
               {socialLinks.map((link) => (
                 <a
                   key={link.label}
@@ -57,9 +57,12 @@ export function Footer() {
                   title={link.title}
                   target={(link as any).target}
                   rel={(link as any).rel}
-                  className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
+                  className="group inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-border bg-background/60 text-muted-foreground hover:text-primary hover:bg-primary/10 hover:border-primary/50 shadow-sm hover:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2"
                 >
-                  <i className={`${(link as any).iconClass} text-2xl`} aria-hidden="true" />
+                  <i
+                    className={`${(link as any).iconClass} text-2xl md:text-3xl transition-transform duration-200 group-hover:scale-110`}
+                    aria-hidden="true"
+                  />
                 </a>
               ))}
             </div>

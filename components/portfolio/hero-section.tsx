@@ -65,37 +65,46 @@ export function HeroSection() {
               </Button>
             </div>
 
-            <div className="flex items-center gap-6 pt-4">
+            <div className="flex items-center gap-4 md:gap-5 pt-4">
               <a
                 href="https://wa.me/905316924944"
-                className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
+                className="group inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-border bg-background/60 text-muted-foreground hover:text-primary hover:bg-primary/10 hover:border-primary/50 shadow-sm hover:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2"
                 aria-label="WhatsApp"
                 title="WhatsApp"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <i className="fa-brands fa-whatsapp text-2xl" aria-hidden="true" />
+                <i className="fa-brands fa-whatsapp text-2xl md:text-3xl transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
               </a>
               <a
                 href="https://www.instagram.com/montaser_haj_omar8?igsh=anBndDNoMmhnN2Fz"
-                className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
+                className="group inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-border bg-background/60 text-muted-foreground hover:text-primary hover:bg-primary/10 hover:border-primary/50 shadow-sm hover:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2"
                 aria-label="Instagram"
+                title="Instagram"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <i className="fa-brands fa-instagram text-2xl" aria-hidden="true" />
+                <i className="fa-brands fa-instagram text-2xl md:text-3xl transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
               </a>
               <a
                 href="https://www.facebook.com/share/18GKrh5v9R/"
-                className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
+                className="group inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-border bg-background/60 text-muted-foreground hover:text-primary hover:bg-primary/10 hover:border-primary/50 shadow-sm hover:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2"
                 aria-label="Facebook"
+                title="Facebook"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <i className="fa-brands fa-facebook text-2xl" aria-hidden="true" />
+                <i className="fa-brands fa-facebook text-2xl md:text-3xl transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
               </a>
               <a
                 href="https://www.linkedin.com/in/montaser-haj-omar-b91841281?utm_source=share_via&utm_content=profile&utm_medium=member_android"
-                className="text-muted-foreground hover:text-primary transition-all hover:scale-110"
+                className="group inline-flex items-center justify-center w-12 h-12 md:w-14 md:h-14 rounded-full border border-border bg-background/60 text-muted-foreground hover:text-primary hover:bg-primary/10 hover:border-primary/50 shadow-sm hover:shadow-md transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2"
                 aria-label="LinkedIn"
+                title="LinkedIn"
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <i className="fa-brands fa-linkedin text-2xl" aria-hidden="true" />
+                <i className="fa-brands fa-linkedin text-2xl md:text-3xl transition-transform duration-200 group-hover:scale-110" aria-hidden="true" />
               </a>
             </div>
           </div>
