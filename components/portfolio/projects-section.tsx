@@ -98,36 +98,37 @@ export function ProjectsSection() {
       : baseProjects.filter((p) => (p.type ?? classifyProjectLike(p)) === activeFilter);
 
   return (
-    <section id="projects" dir="rtl" className="py-24 md:py-32 bg-background relative overflow-hidden">
+    <section id="projects" dir="rtl" className="border-y border-border/60 bg-background py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-6">
-        
-        {/* Header Section */}
-        <div className="mb-12 md:mb-16 space-y-4 text-right">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-2">
-            <LayoutGrid size={14} />
-            <span>معرض الأعمال</span>
-          </div>
-          <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight leading-tight">
-            أحدث <span className="text-primary">الإبداعات</span>
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed font-medium">
+        <div className="mb-14 grid gap-8 border-b border-border/60 pb-10 md:grid-cols-[1fr_auto] md:items-end">
+          <div className="space-y-5 text-right">
+            <div className="flex items-center justify-end gap-3 text-xs font-bold tracking-[0.18em] text-primary">
+              <span className="h-px w-10 bg-primary/60" />
+              <LayoutGrid size={15} />
+              <span>معرض الأعمال</span>
+            </div>
+            <h2 className="text-4xl font-black leading-tight text-foreground md:text-6xl">
+              أحدث <span className="text-primary">الإبداعات</span>
+            </h2>
+            <p className="max-w-2xl text-lg font-medium leading-relaxed text-muted-foreground">
             مجموعة مختارة من المشاريع التي تعكس شغفنا بالابتكار ودقتنا في التنفيذ البرمجي.
+            </p>
+          </div>
+          <p className="text-right text-sm font-bold tracking-widest text-muted-foreground/70 md:pb-2">
+            2024 — 2025
           </p>
         </div>
 
-        {/* --- Navigation & Filtering --- */}
-        <div className="mb-20">
-          
-          {/* Mobile: Custom Select */}
+        <div className="mb-16 border-b border-border/60 pb-4">
           <div className="relative block md:hidden w-full group">
-            <label className="block text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-3 mr-1 opacity-80">
+            <label className="mb-3 mr-1 block text-[10px] font-black uppercase tracking-[0.2em] text-primary">
               تصفية حسب الفئة
             </label>
-            <div className="relative rounded-2xl border border-border/60 bg-secondary/20 backdrop-blur-xl transition-all duration-300 focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/5">
+            <div className="relative border border-border/70 bg-secondary/10 transition-all duration-300 focus-within:border-primary/60">
               <select
                 value={activeFilter}
                 onChange={(e) => setActiveFilter(e.target.value as ProjectType)}
-                className="w-full appearance-none bg-transparent text-foreground py-5 pr-5 pl-14 font-bold text-base cursor-pointer outline-none relative z-10"
+                className="relative z-10 w-full cursor-pointer appearance-none bg-transparent py-4 pl-14 pr-5 text-base font-bold text-foreground outline-none"
               >
                 {typeOrder.map((t) => (
                   <option key={t} value={t} className="bg-background text-foreground">
@@ -136,11 +137,11 @@ export function ProjectsSection() {
                 ))}
               </select>
               <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10 text-primary transition-transform group-focus-within:rotate-180">
+                <div className="flex h-8 w-8 items-center justify-center text-primary transition-transform group-focus-within:rotate-180">
                   <ChevronDown size={20} strokeWidth={2.5} />
                 </div>
               </div>
-              <div className="absolute right-0 top-3 bottom-3 w-1 bg-primary rounded-l-full shadow-[0_0_12px_rgba(var(--primary),0.4)]" />
+              <div className="absolute right-0 top-0 bottom-0 w-0.5 bg-primary" />
             </div>
           </div>
 
@@ -148,26 +149,26 @@ export function ProjectsSection() {
           <Tabs
             value={activeFilter}
             onValueChange={(v) => setActiveFilter(v as ProjectType)}
-            className="hidden md:block w-full"
+            className="hidden w-full md:block"
           >
-            <TabsList className="flex w-max mx-auto h-auto p-1.5 bg-secondary/30 rounded-[2rem] border border-border/40 backdrop-blur-md">
+            <TabsList className="mx-0 flex h-auto w-full justify-start gap-1 rounded-none border-0 border-b-0 bg-transparent p-0">
               {typeOrder.map((t) => (
                 <TabsTrigger
                   key={t}
                   value={t}
                   className={cn(
-                    "relative flex items-center gap-3 px-8 py-3.5 rounded-[1.5rem] transition-all duration-500",
-                    "data-[state=active]:bg-background data-[state=active]:text-primary data-[state=active]:shadow-xl data-[state=active]:scale-[1.02]",
-                    "text-muted-foreground hover:text-foreground cursor-pointer font-bold text-sm"
+                    "relative flex items-center gap-3 rounded-none border-0 border-b-2 border-transparent px-5 py-3 transition-colors",
+                    "data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:text-primary",
+                    "text-muted-foreground hover:bg-secondary/30 hover:text-foreground cursor-pointer font-bold text-sm"
                   )}
                 >
                   <span>{TYPE_LABELS[t]}</span>
                   <span
                     className={cn(
-                      "flex items-center justify-center min-w-[24px] h-6 px-1.5 text-[11px] font-black rounded-full transition-all",
-                      activeFilter === t 
-                        ? "bg-primary text-primary-foreground scale-110 shadow-lg shadow-primary/20" 
-                        : "bg-muted text-muted-foreground"
+                      "flex min-w-5.5 items-center justify-center border border-border/70 px-1.5 py-0.5 text-[10px] font-black transition-colors",
+                      activeFilter === t
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "bg-transparent text-muted-foreground"
                     )}
                   >
                     {typeCounts[t]}
@@ -178,10 +179,9 @@ export function ProjectsSection() {
           </Tabs>
         </div>
 
-        {/* --- Projects Grid --- */}
-        <div className="space-y-32 md:space-y-48">
+        <div className="space-y-0">
           {filteredProjects.length === 0 ? (
-            <Empty className="border-2 border-dashed border-border/40 min-h-[350px] rounded-[3rem] bg-secondary/5">
+            <Empty className="min-h-87.5 border border-dashed border-border/60 bg-secondary/5">
               <EmptyHeader>
                 <EmptyTitle className="text-2xl font-black">نأسف، لا توجد نتائج</EmptyTitle>
                 <EmptyDescription className="text-base font-medium">
@@ -199,16 +199,14 @@ export function ProjectsSection() {
                 <AnimatedInView
                   key={project.id}
                   from={isEven ? "right" : "left"}
-                  className={cn(
-                    "flex flex-col gap-12 md:gap-20 items-center",
-                    isEven ? "md:flex-row" : "md:flex-row-reverse"
-                  )}
+                  className="border-t border-border/60 py-12 first:border-t-0 md:py-16"
                 >
-                  {/* Image Container */}
-                  <div className="relative w-full md:w-[58%] group">
-                    <div className="absolute inset-0 bg-primary/5 -rotate-2 rounded-[2.5rem] -z-10 group-hover:rotate-0 transition-transform duration-700" />
-                    
-                    <div className="relative aspect-[16/10] w-full overflow-hidden rounded-[2.5rem] border border-border/50 shadow-2xl bg-secondary/20">
+                  <div className={cn(
+                    "flex flex-col items-start gap-8 md:flex-row md:items-center md:gap-12",
+                    !isEven && "md:flex-row-reverse"
+                  )}>
+                    <div className="group relative w-full md:w-[54%]">
+                      <div className="relative aspect-16/10 w-full overflow-hidden border border-border/60 bg-secondary/20">
                       {imgSrc ? (
                         <Image
                           src={imgSrc}
@@ -224,44 +222,44 @@ export function ProjectsSection() {
                         </div>
                       )}
                       
-                      <div className="absolute top-6 right-6">
-                        <span className="px-5 py-2 rounded-2xl bg-background/60 backdrop-blur-2xl border border-white/10 text-primary text-[10px] font-black uppercase tracking-widest">
+                      <div className="absolute right-4 top-4">
+                        <span className="border border-white/20 bg-background/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-primary">
                           {project.category}
                         </span>
                       </div>
 
                       <Link
                         href={`/projects/${project.id}`}
-                        className="absolute bottom-6 left-6 md:right-6 md:left-auto flex items-center gap-3 px-6 py-3 rounded-2xl bg-primary text-primary-foreground font-black text-xs shadow-2xl hover:-translate-y-1 transition-all group/btn"
+                        className="absolute bottom-4 left-4 flex items-center gap-3 border border-primary bg-primary px-5 py-2.5 text-xs font-black text-primary-foreground transition-colors hover:bg-transparent hover:text-primary md:right-4 md:left-auto"
                       >
                         عرض التفاصيل
                         <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
                       </Link>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Content Container */}
-                  <div className={cn(
-                    "w-full md:w-[42%] space-y-8",
-                    isEven ? "md:pr-12" : "md:pl-12 text-right md:text-left"
-                  )}>
-                    <div className="space-y-4">
-                       <h3 className="text-3xl md:text-5xl font-black text-foreground leading-[1.1]">
+                    <div className="w-full space-y-6 text-right md:w-[46%]">
+                      <p className="text-xs font-black tracking-[0.2em] text-primary">
+                        {String(index + 1).padStart(2, "0")}
+                      </p>
+                      <div className="space-y-3">
+                        <h3 className="text-3xl font-black leading-tight text-foreground md:text-4xl">
                         {project.title}
-                      </h3>
-                      <div className="h-1.5 w-20 bg-primary/20 rounded-full" />
-                    </div>
-                    
-                    <p className="text-muted-foreground text-lg md:text-xl leading-relaxed font-medium">
-                      {project.problem || "تجربة رقمية متكاملة تجمع بين التصميم المبتكر والأداء القوي."}
-                    </p>
+                        </h3>
+                        <div className="h-px w-16 bg-primary/70" />
+                      </div>
 
-                    <div className="flex flex-wrap gap-3 pt-4">
-                      {project.technologies?.slice(0, 4).map((tech: string) => (
-                        <span key={tech} className="px-3 py-1 rounded-lg bg-secondary/50 border border-border/50 text-[10px] font-bold text-muted-foreground uppercase">
+                      <p className="text-base font-medium leading-relaxed text-muted-foreground md:text-lg">
+                        {project.problem || "تجربة رقمية متكاملة تجمع بين التصميم المبتكر والأداء القوي."}
+                      </p>
+
+                      <div className="flex flex-wrap gap-x-4 gap-y-2 border-t border-border/60 pt-4">
+                        {project.technologies?.slice(0, 4).map((tech: string) => (
+                          <span key={tech} className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
                           {tech}
-                        </span>
-                      ))}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </AnimatedInView>
